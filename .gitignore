@@ -1,0 +1,33 @@
+# --- Archivos de sistema operativo ---
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# --- Dependencias (ejemplo para Node.js/Python) ---
+node_modules/
+jspm_packages/
+venv/
+.env
+
+# --- Archivos de compilación y temporales ---
+dist/
+build/
+*.log
+*.tmp
+*.temp
+.cache/
+
+# --- Configuraciones de IDEs/Editores ---
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# --- Archivos de secretos/credenciales ---
+*.env
+*.secret
+config.json
