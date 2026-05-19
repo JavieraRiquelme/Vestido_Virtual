@@ -1,3 +1,6 @@
+# Prototipo principal del Vestidor Virtual hecho en Streamlit.
+# Contiene la navegación base entre Inicio, Mi Ropa y Outfits.
+# Este archivo será reemplazado por el frontend en React + backend en FastAPI.
 import streamlit as st
 
 st.title("Vestidor Virtual")

@@ -1,3 +1,5 @@
+# Prototipo de visualización de datos con Streamlit usando datos reales de Uber.
+# Sirve como referencia para aprender a usar mapas, gráficos y filtros interactivos.
 import streamlit as st
 import pandas as pd
 import numpy as np
