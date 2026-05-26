@@ -14,4 +14,5 @@ class Prenda(db.Model):
     imagen_path = db.Column(db.String(255), nullable=False)
     temperatura = db.Column(db.Float)
     humedad = db.Column(db.Float)
+    descripcion_clima = db.Column(db.String(100))
     user_id = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
