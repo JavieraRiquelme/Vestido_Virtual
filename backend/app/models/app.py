@@ -1,41 +1,44 @@
-from flask import Flask, request, jsonify
-from models import db, Usuario, Prenda
+from fastapi import FastAPI, UploadFile, File, Form, Depends
+from sqlalchemy.orm import Session
 import os
-from werkzeug.utils import secure_filename
+import shutil
+import models 
 
-app = Flask(__name__)
+app = FastAPI()
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///datos.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['UPLOAD_FOLDER'] = 'static/uploads'
+UPLOAD_FOLDER = "static/uploads"
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-db.init_app(app)
-@app.route('/subir_prenda', methods=['POST'])
-def subir_prenda():
+def get_db():
+    db = models.SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
-    if 'file' not in request.files:
-        return jsonify({"error": "No hay archivo"}), 400
+@app.get("/")
+def inicio():
+    return {"mensaje": "Backend de Cata con FastAPI funcionando"}
+
+@app.post("/subir_prenda")
+async def subir_prenda(
+    user_id: int = Form(...),
+    temp: float = Form(...),
+    hum: float = Form(...),
+    file: UploadFile = File(...),
+    db: Session = Depends(get_db)
+):
+    filepath = os.path.join(UPLOAD_FOLDER, file.filename)
+    with open(filepath, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
     
-    file = request.files['file']
-    user_id = request.form.get('user_id')
+    nueva_prenda = models.Prenda(
+        imagen_path=filepath,
+        temperatura=temp,
+        humedad=hum,
+        user_id=user_id
+    )
+    db.add(nueva_prenda)
+    db.commit()
     
-    if file:
-        filename = secure_filename(file.filename)
-        if not os.path.exists(app.config['UPLOAD_FOLDER']):
-            os.makedirs(app.config['UPLOAD_FOLDER'])
-            
-        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        file.save(filepath)
-        
-        nueva_prenda = Prenda(
-            imagen_path=filepath, 
-            user_id=user_id,
-            temperatura=request.form.get('temp'),
-            humedad=request.form.get('hum')
-        )
-        db.session.add(nueva_prenda)
-        db.session.commit()
-        
-        return jsonify({"message": "¡Prenda guardada!", "ruta": filepath}), 201
-if __name__ == '__main__':
-    app.run(debug=True)
+    return {"status": "OK", "ruta": filepath}
