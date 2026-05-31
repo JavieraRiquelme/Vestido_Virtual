@@ -57,13 +57,17 @@ def sugerir_outfit(ciudad: str, ocasion: str) -> dict:
     else:
         sugerencia = "vestido liviano o shorts y sandalias"
     
+    nombre = f"Outfit {clima['categoria']} {ocasion}"
+    
     return {
+        "nombre": nombre,
         "ciudad": clima["ciudad"],
         "pais": clima["pais"],
         "temperatura": clima["temperatura"],
-        "categoria": clima["categoria"],
+        "ideal_clima": clima["categoria"],
         "descripcion": clima["descripcion"],
         "consultado_at": clima["consultado_at"],
         "ocasion": ocasion,
-        "sugerencia": sugerencia
+        "sugerencia": sugerencia,
+        "rating": None
     }
