@@ -1,11 +1,10 @@
 from fastapi import FastAPI
+from app.api.routes.clima import router as clima_router
 
-app = FastAPI(title="Vestidor Virtual") # Creamos la APP
+app = FastAPI(title="Vestidor Virtual")
 
-@app.get("/")                           # Define ruta GET
-def home():                             # Función que maneja la request
-    return {"mensaje": "hola!"}         # FastAPI convierte dict a JSON 
+app.include_router(clima_router)
 
-# uvicorn main:app --reload 
-# main -> archivo main.py ; app -> variable app dentro del archivo ; --reload -> reinicia cuando cambio el código
-# --reload solo en desarrollo
+@app.get("/")
+def home():
+    return {"mensaje": "hola!"}

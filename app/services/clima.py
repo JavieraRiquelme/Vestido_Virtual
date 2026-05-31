@@ -1,6 +1,7 @@
 import requests
 import os
 from dotenv import load_dotenv
+from datetime import datetime
 
 load_dotenv()
 
@@ -23,11 +24,22 @@ def obtener_clima(ciudad: str) -> dict:
             return {"error": f"Ciudad '{ciudad}' no encontrada"}
         
         data = response.json()
+        temperatura = round(data["main"]["temp"], 1)
+
+        if temperatura < 14:
+            categoria = "frio"
+        elif temperatura < 22:
+            categoria = "templado"
+        else:
+            categoria = "calido"
+
         return {
             "ciudad": data["name"],
-            "temperatura": round(data["main"]["temp"], 1),
+            "pais": data["sys"]["country"],
+            "temperatura": temperatura,
+            "categoria": categoria,
             "descripcion": data["weather"][0]["description"],
-            "humedad": data["main"]["humidity"],
+            "consultado_at": datetime.now()
         }
     except Exception as e:
         return {"error": str(e)}
@@ -38,23 +50,20 @@ def sugerir_outfit(ciudad: str, ocasion: str) -> dict:
     if "error" in clima:
         return clima
     
-    temperatura = clima["temperatura"]
-    
-    if temperatura < 14:
-        tipo = "frio"
+    if clima["categoria"] == "frio":
         sugerencia = "chaqueta, pantalón largo y zapatos cerrados"
-    elif temperatura < 22:
-        tipo = "templado"
+    elif clima["categoria"] == "templado":
         sugerencia = "polera, jeans y zapatillas"
     else:
-        tipo = "calido"
         sugerencia = "vestido liviano o shorts y sandalias"
     
     return {
         "ciudad": clima["ciudad"],
-        "temperatura": temperatura,
+        "pais": clima["pais"],
+        "temperatura": clima["temperatura"],
+        "categoria": clima["categoria"],
         "descripcion": clima["descripcion"],
-        "tipo_clima": tipo,
+        "consultado_at": clima["consultado_at"],
         "ocasion": ocasion,
         "sugerencia": sugerencia
     }

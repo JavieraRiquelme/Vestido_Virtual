@@ -1,17 +1,14 @@
-from flask import Blueprint, jsonify, request
+from fastapi import APIRouter
 from app.services.clima import sugerir_outfit, obtener_clima
 
-clima_bp = Blueprint('clima', __name__)
+router = APIRouter()
 
-@clima_bp.route('/clima', methods=['GET'])
-def get_clima():
-    ciudad = request.args.get('ciudad', 'Santiago')
+@router.get('/clima')
+def get_clima(ciudad: str = 'Santiago'):
     datos = obtener_clima(ciudad)
-    return jsonify(datos)
+    return datos
 
-@clima_bp.route('/outfit', methods=['GET'])
-def get_outfit():
-    ciudad = request.args.get('ciudad', 'Santiago')
-    ocasion = request.args.get('ocasion', 'casual')
+@router.get('/outfit')
+def get_outfit(ciudad: str = 'Santiago', ocasion: str = 'casual'):
     datos = sugerir_outfit(ciudad, ocasion)
-    return jsonify(datos)
+    return datos
