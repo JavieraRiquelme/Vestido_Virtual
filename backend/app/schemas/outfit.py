@@ -2,23 +2,21 @@ from pydantic import BaseModel, ConfigDict
 from datetime import datetime
 
 
-class PrendaCreate(BaseModel):
+class OutfitCreate(BaseModel):
     usuario_id: int
-    categoria_id: int
+    ocasion_id: int
     nombre: str
-    color: str | None = None
     ideal_clima: str | None = None
-    imagen_url: str | None = None
+    rating: float | None = None
 
 
-class PrendaRead(BaseModel):
+class OutfitRead(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     id: int
     usuario_id: int
-    categoria_id: int
+    ocasion_id: int
     nombre: str
-    color: str | None
     ideal_clima: str | None
-    imagen_url: str | None
+    rating: float | None
     created_at: datetime
