@@ -1,10 +1,44 @@
-from flask import Flask
-from models import db
+from fastapi import FastAPI, UploadFile, File, Form, Depends
+from sqlalchemy.orm import Session
+import os
+import shutil
+import models 
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///datos.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db.init_app(app)
+app = FastAPI()
 
-if __name__ == '__main__':
-    app.run(debug=True)
+UPLOAD_FOLDER = "static/uploads"
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+def get_db():
+    db = models.SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+@app.get("/")
+def inicio():
+    return {"mensaje": "Backend de Cata con FastAPI funcionando"}
+
+@app.post("/subir_prenda")
+async def subir_prenda(
+    user_id: int = Form(...),
+    temp: float = Form(...),
+    hum: float = Form(...),
+    file: UploadFile = File(...),
+    db: Session = Depends(get_db)
+):
+    filepath = os.path.join(UPLOAD_FOLDER, file.filename)
+    with open(filepath, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+    
+    nueva_prenda = models.Prenda(
+        imagen_path=filepath,
+        temperatura=temp,
+        humedad=hum,
+        user_id=user_id
+    )
+    db.add(nueva_prenda)
+    db.commit()
+    
+    return {"status": "OK", "ruta": filepath}
