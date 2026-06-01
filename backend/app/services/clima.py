@@ -2,19 +2,16 @@ import requests
 import os
 from dotenv import load_dotenv
 from datetime import datetime
-
+from backend.app.core.config import settings
 load_dotenv()
-
-API_KEY = os.getenv("OPENWEATHER_API_KEY")
-BASE_URL = "https://api.openweathermap.org/data/2.5/weather"
 
 def obtener_clima(ciudad: str) -> dict:
     try:
         response = requests.get(
-            BASE_URL,
+            settings.OPENWEATHER_URL,
             params={
                 "q": ciudad,
-                "appid": API_KEY,
+                "appid": settings.OPENWEATHER_API_KEY,
                 "units": "metric",
                 "lang": "es"
             },
@@ -39,6 +36,45 @@ def obtener_clima(ciudad: str) -> dict:
             "temperatura": temperatura,
             "categoria": categoria,
             "descripcion": data["weather"][0]["description"],
+            "icono": data["weather"][0]["icon"],
+            "consultado_at": datetime.now()
+        }
+    except Exception as e:
+        return {"error": str(e)}
+
+def obtener_clima_gps(lat: float, lon: float) -> dict:
+    try:
+        response = requests.get(
+            settings.OPENWEATHER_URL,
+            params={
+                "lat": lat,
+                "lon": lon,
+                "appid": settings.OPENWEATHER_API_KEY,
+                "units": "metric",
+                "lang": "es"
+            },
+            timeout=5
+        )
+        if response.status_code != 200:
+            return {"error": f"Error al obtener el clima: {response.status_code}"}
+        
+        data = response.json()
+        temperatura = round(data["main"]["temp"], 1)
+
+        if temperatura < 14:
+            categoria = "frio"
+        elif temperatura < 22:
+            categoria = "templado"
+        else:
+            categoria = "calido"
+
+        return {
+            "ciudad": data["name"],
+            "pais": data["sys"]["country"],
+            "temperatura": temperatura,
+            "categoria": categoria,
+            "descripcion": data["weather"][0]["description"],
+            "icono": data["weather"][0]["icon"],
             "consultado_at": datetime.now()
         }
     except Exception as e:
@@ -66,6 +102,7 @@ def sugerir_outfit(ciudad: str, ocasion: str) -> dict:
         "temperatura": clima["temperatura"],
         "ideal_clima": clima["categoria"],
         "descripcion": clima["descripcion"],
+        "icono": clima["icono"],
         "consultado_at": clima["consultado_at"],
         "ocasion": ocasion,
         "sugerencia": sugerencia,
