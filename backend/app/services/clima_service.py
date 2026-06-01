@@ -26,4 +26,4 @@ def get_clima(lat: float, lon: float) -> dict:
         "temperatura": data["main"]["temp"],
         "descripcion": data["weather"][0]["description"],
         "icono": data["weather"][0]["icon"]
-    }
+    }s
