@@ -1,79 +1,99 @@
 # Conectar Frontend y Backend 🐙
 
-Para que la app funcione localmente necesitan completar estas tareas **en orden**.
+Esta guía explica los pasos necesarios para que la app funcione localmente: que el frontend pueda hablarle al backend y mostrar datos reales. Son 4 pasos y tienen un orden específico porque cada uno depende del anterior.
+
+---
+
+## Entendiendo cómo se conectan
+
+El frontend (React, puerto 5173) y el backend (FastAPI, puerto 8000) son dos programas separados que se comunican por HTTP, igual que cuando un navegador carga una página web. El frontend le hace "preguntas" al backend (por ejemplo: "dame los outfits del usuario 1") y el backend le responde con los datos.
+
+Para que esto funcione necesitamos tres cosas:
+1. Que el backend permita las peticiones del frontend (CORS)
+2. Que existan las tablas en la base de datos (si no hay tablas, el backend falla)
+3. Que el frontend sepa la dirección del backend
 
 ---
 
 ## Orden de trabajo
 
 ```
-1. Ana  → CORS
-2. Cata → Tablas + Seeds + Usuario de prueba
-3. Javiera → URL del backend en el frontend
-4. Todas → probar juntas
+① Ana  → Agregar CORS al backend
+② Cata → Crear las tablas + cargar datos iniciales + crear usuario de prueba
+③ Javiera → Apuntar el frontend al backend
+④ Todas → Probar juntas
 ```
 
 ---
 
-## Ana 🟣
+## ① Ana — Agregar CORS
 
-### Tarea 1 — Agregar CORS
+**¿Por qué esto va primero?**
 
-Archivo: `backend/app/api/routes/main.py`
+Sin CORS el navegador bloquea todas las peticiones del frontend al backend con un error. Es lo más bloqueante de todo, así que va primero.
 
-Agregar después de crear el `app`:
+**¿Qué es CORS exactamente?**
+
+CORS (Cross-Origin Resource Sharing) es una medida de seguridad del navegador. Por defecto, si el frontend está en `localhost:5173` y el backend en `localhost:8000`, el navegador considera que son "orígenes distintos" y bloquea la comunicación. Configurar CORS es básicamente decirle al backend: "confío en las peticiones que vienen de estas direcciones".
+
+**Qué tenés que hacer:**
+
+Abrí el archivo `backend/app/api/routes/main.py` y agregá el middleware de CORS justo después de crear el `app`. El archivo ya tiene el resto del código, solo tenés que insertar el bloque del middleware:
 
 ```python
 from fastapi.middleware.cors import CORSMiddleware
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=["http://localhost:5173"],  # dirección del frontend local
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["*"],   # permite GET, POST, PUT, DELETE, etc.
+    allow_headers=["*"],   # permite todos los headers
 )
 ```
 
-Guardar, commitear y pushear:
+**Cómo verificar que funcionó:**
 
-```bash
-git add .
-git commit -m "Agregar CORS para conexión con frontend"
-git push origin ana/auth-y-cors
-```
+Reiniciá el servidor backend (`Ctrl+C` y volvé a correr `uvicorn main:app --reload`). Si no hay errores al arrancar, CORS está configurado. La verificación real la hacés después cuando el frontend pueda conectarse.
 
-Avisar a Cata que puede seguir.
+**Guardá y avisale a Cata que puede seguir.**
 
 ---
 
-## Cata 🟢
+## ② Cata — Tablas, datos y usuario de prueba
 
-### Tarea 1 — Crear las tablas al arrancar el servidor
+**¿Por qué esto va segundo?**
 
-Archivo: `backend/main.py`
+Aunque CORS esté configurado, si el backend no tiene tablas en la base de datos va a fallar con errores tipo "la tabla no existe". Hay que crear las tablas antes de que el frontend empiece a hacer peticiones.
+
+### Paso 1 — Crear las tablas automáticamente
+
+Abrí `backend/main.py` y agregá el evento de startup. Este evento se ejecuta cada vez que el servidor arranca y crea las tablas si no existen:
 
 ```python
 from app.api.routes.main import app
 from app.models.models import Base
 from app.core.database import engine
 
-
 @app.on_event("startup")
 def crear_tablas():
+    # Crea todas las tablas definidas en models.py si todavía no existen
     Base.metadata.create_all(bind=engine)
-
 
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
 ```
 
+Reiniciá el servidor. Si arranca sin errores, las tablas se crearon.
+
 ---
 
-### Tarea 2 — Cargar datos iniciales (categorías y ocasiones)
+### Paso 2 — Cargar las categorías y ocasiones
 
-Archivo: `database/seeds/seed.py`
+El servicio de sugerencias necesita que existan datos en las tablas `categorias_prenda` y `ocasiones`. Sin esto, cuando el frontend pida una sugerencia de outfit, el backend no va a encontrar categorías y va a devolver una lista vacía.
+
+Creá el archivo `database/seeds/seed.py` con este contenido:
 
 ```python
 import sys, os
@@ -111,26 +131,27 @@ db.close()
 print("Seeds cargados.")
 ```
 
-Ejecutar desde la raíz del proyecto:
-
+Ejecutalo desde la raíz del proyecto:
 ```bash
 python database/seeds/seed.py
 ```
 
 ---
 
-### Tarea 3 — Crear un usuario de prueba
+### Paso 3 — Crear un usuario de prueba
 
-1. Arrancar el backend:
-```bash
-cd backend
-uvicorn main:app --reload
-```
+**¿Por qué hace falta?**
 
-2. Abrir en el navegador: `http://localhost:8000/docs`
-3. Buscar el endpoint `POST /usuarios/`
-4. Hacer clic en **Try it out**
-5. Pegar este JSON y ejecutar:
+El frontend todavía tiene el usuario hardcodeado como `USUARIO_ID_TEMP = 1` en todas las pantallas. Esto significa que todas las peticiones van a pedir datos del usuario con `id = 1`. Si ese usuario no existe en la base de datos, el backend va a devolver listas vacías o errores.
+
+**Cómo crearlo:**
+
+1. Asegurate de que el backend esté corriendo: `uvicorn main:app --reload`
+2. Abrí el navegador y andá a `http://localhost:8000/docs`
+3. Esta es la documentación interactiva que genera FastAPI automáticamente. Podés probar todos los endpoints desde acá.
+4. Buscá la sección **usuarios** y hacé clic en `POST /usuarios/`
+5. Hacé clic en el botón **Try it out** (arriba a la derecha del endpoint)
+6. En el campo **Request body**, reemplazá el contenido por:
 
 ```json
 {
@@ -141,59 +162,68 @@ uvicorn main:app --reload
 }
 ```
 
-6. Verificar que la respuesta muestre `"id": 1`
+7. Hacé clic en **Execute**
+8. Verificá que en la respuesta aparezca `"id": 1`
 
-Commitear y pushear:
+Si aparece `"id": 1`, perfecto. Si aparece otro número significa que ya había usuarios en la base de datos. En ese caso borrá los usuarios existentes desde **Supabase → Table Editor → tabla usuarios** y volvé a intentar.
 
-```bash
-git add .
-git commit -m "Agregar startup de tablas y seed script"
-git push origin cata/modelos-y-db
-```
-
-Avisar a Javiera que puede seguir.
+**Avisale a Javiera que puede seguir.**
 
 ---
 
-## Javiera 🔵
+## ③ Javiera — Apuntar el frontend al backend
 
-### Tarea 1 — Apuntar el frontend al backend
+**¿Por qué esto va tercero?**
 
-Verificar que existe el archivo `frontend/.env.local`. Si no existe, crearlo:
+El frontend necesita saber la dirección del backend para hacerle peticiones. Esta dirección se configura con una variable de entorno. Conviene hacer esto último para que cuando pruebes ya esté todo el backend listo.
+
+**Cómo verificar que el archivo existe:**
+
+Fijate si hay un archivo llamado `.env.local` dentro de la carpeta `frontend/`. Si no existe, crealo. En la terminal, desde la raíz del proyecto:
 
 ```bash
 echo "VITE_API_URL=http://localhost:8000" > frontend/.env.local
 ```
 
+Este archivo le dice al frontend: "el backend está en `http://localhost:8000`". El prefijo `VITE_` es obligatorio para que Vite lo reconozca como variable de entorno.
+
 ---
 
-### Tarea 2 — Probar que todo conecta
+## ④ Todas — Probar juntas
 
-1. Arrancar el backend (en una terminal):
+Con los tres pasos anteriores completos, la app debería funcionar. Acá están las cosas para probar:
+
+**1. Arrancar el backend** (en una terminal):
 ```bash
 cd backend
 uvicorn main:app --reload
 ```
+Tiene que decir: `Application startup complete.`
 
-2. Arrancar el frontend (en otra terminal):
+**2. Arrancar el frontend** (en otra terminal):
 ```bash
 cd frontend
 npm run dev
 ```
+Tiene que decir: `➜ Local: http://localhost:5173/`
 
-3. Abrir `http://localhost:5173` en el navegador
-4. Ir a **Recomendaciones** → seleccionar temperatura, condiciones y ocasión → clic en **Armar outfit**
-5. Verificar que devuelve una respuesta (aunque sea vacía, no debe dar error de red)
-6. Ir a **Mis Outfits** → verificar que carga sin errores
+**3. Abrir la app** en el navegador: `http://localhost:5173`
+
+**4. Qué probar:**
+
+- **Pantalla "Mis Outfits"** → tiene que cargar sin error (puede estar vacía, eso es normal)
+- **Pantalla "Recomendaciones"** → seleccioná temperatura, condición y ocasión, hacé clic en "Armar outfit"
+- **Pantalla "Resultado"** → si el usuario de prueba no tiene prendas cargadas, va a aparecer el mensaje "No tienes prendas cargadas para este clima", eso es correcto
 
 ---
 
 ## Si algo falla 🔍
 
-| Error en el navegador | Causa | Quién lo arregla |
-|----------------------|-------|------------------|
-| `CORS error` | CORS no está configurado | Ana |
-| `Failed to fetch` | El backend no está corriendo | Verificar que `uvicorn` esté activo |
-| `relation does not exist` | Las tablas no se crearon | Cata (tarea 1) |
-| `404 Not Found` | La URL del backend es incorrecta | Javiera (verificar `.env.local`) |
-| Respuesta vacía en sugerencias | No hay prendas del usuario | Normal por ahora, el usuario de prueba no tiene prendas aún |
+| Lo que ves | Qué significa | Quién lo resuelve |
+|------------|---------------|-------------------|
+| Error "CORS" o "Access blocked" en la consola del navegador | CORS no está configurado | Ana — revisar tarea ① |
+| Error "Failed to fetch" o "Network Error" | El backend no está corriendo | Verificar que `uvicorn` esté activo en la terminal |
+| Error "relation does not exist" en la terminal del backend | Las tablas no se crearon | Cata — revisar paso 1 de tarea ② |
+| La pantalla Mis Outfits carga pero está vacía | Normal, el usuario no tiene outfits guardados aún | No es un error |
+| Recomendaciones devuelve "No tienes prendas" | El usuario de prueba no tiene prendas. Normal por ahora. | No es un error |
+| La app abre pero los datos no cargan | Revisar que `VITE_API_URL` esté en `frontend/.env.local` | Javiera — revisar tarea ③ |
