@@ -16,8 +16,11 @@ def consultar_clima(lat: float, lon: float, db: Session = Depends(get_db)):
 
     registro = Clima(
         ciudad=datos["ciudad"],
+        pais=datos.get("pais"),
         temperatura=datos["temperatura"],
+        categoria=datos["categoria"],
         descripcion=datos["descripcion"],
+        consultado_at=datos["consultado_at"],
     )
     db.add(registro)
     db.commit()

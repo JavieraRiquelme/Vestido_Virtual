@@ -1,6 +1,6 @@
 import requests
 from datetime import datetime
-from backend.app.core.config import settings
+from app.core.config import settings
 
 
 def _categorizar(temperatura: float) -> str:

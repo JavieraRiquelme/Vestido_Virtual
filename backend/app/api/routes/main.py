@@ -8,6 +8,7 @@ from app.api.routes import (
     clima,
     estilos,
     recomendaciones,
+    sugerencias,
 )
 
 app = FastAPI()
@@ -20,3 +21,4 @@ app.include_router(outfits.router,           prefix="/outfits",           tags=[
 app.include_router(clima.router,             prefix="/clima",             tags=["clima"])
 app.include_router(estilos.router,           prefix="/estilos",           tags=["estilos"])
 app.include_router(recomendaciones.router,   prefix="/recomendaciones",   tags=["recomendaciones"])
+app.include_router(sugerencias.router,       prefix="/sugerencias",       tags=["sugerencias"])
