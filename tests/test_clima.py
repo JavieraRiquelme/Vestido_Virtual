@@ -1,5 +1,4 @@
-from app.services.clima import obtener_clima, sugerir_outfit
-
+from backend.app.services.clima import obtener_clima, sugerir_outfit
 def test_ciudad_valida():
     resultado = obtener_clima("Santiago")
     assert "error" not in resultado
