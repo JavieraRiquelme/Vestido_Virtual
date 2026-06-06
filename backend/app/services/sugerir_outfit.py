@@ -1,31 +1,11 @@
 """
 sugerir_outfit.py — Lógica de recomendación de outfit
-Isidora — Sprint 2
-
-Dado el clima actual (temperatura + condición) y la ocasión del día,
-filtra las prendas del usuario y arma una sugerencia de outfit.
+Conecta el closet del usuario con GPT-4o para sugerir outfits.
 """
 
 from sqlalchemy.orm import Session
 from app.models.models import Prenda, Outfit, OutfitPrenda
-
-
-# ── Mapeo de categorías ──────────────────────────────────────────────────────
-# categoria_id debe coincidir con la tabla de categorías definida por Catalina.
-# Convención acordada en reunión del equipo (semana 2):
-#   1  → top/large   (polera manga larga, chaqueta, poleron)
-#   2  → top/short   (polera manga corta, vestido corto)
-#   3  → bottom/large (pantalón largo, falda larga)
-#   4  → bottom/short (pantalón corto, falda corta)
-#   5  → shoes
-#   6  → accessories
-
-CATEGORIA_TOP_LARGO  = 1
-CATEGORIA_TOP_CORTO  = 2
-CATEGORIA_BOTTOM_LARGO = 3
-CATEGORIA_BOTTOM_CORTO = 4
-CATEGORIA_ZAPATOS    = 5
-CATEGORIA_ACCESORIOS = 6
+from app.services.openai_service import sugerir_outfit_ia
 
 
 def _temperatura_a_nivel(temp: float) -> str:
@@ -38,27 +18,6 @@ def _temperatura_a_nivel(temp: float) -> str:
         return "calor"
 
 
-def _categorias_recomendadas(temp: float, condiciones: list[str]) -> list[int]:
-    """
-    Devuelve la lista de categoria_id preferidos según clima.
-
-    Reglas:
-    - Frío (≤10°C): top largo + bottom largo
-    - Templado (10–18°C): top largo o corto + bottom largo
-    - Calor (>18°C): top corto + bottom corto o largo
-    - Lluvia siempre suma top largo (capa extra)
-    """
-    nivel = _temperatura_a_nivel(temp)
-    llueve = "lluvia" in condiciones or "lloviendo" in condiciones
-
-    if nivel == "frio" or llueve:
-        return [CATEGORIA_TOP_LARGO, CATEGORIA_BOTTOM_LARGO, CATEGORIA_ZAPATOS, CATEGORIA_ACCESORIOS]
-    elif nivel == "templado":
-        return [CATEGORIA_TOP_LARGO, CATEGORIA_BOTTOM_LARGO, CATEGORIA_ZAPATOS, CATEGORIA_ACCESORIOS]
-    else:  # calor
-        return [CATEGORIA_TOP_CORTO, CATEGORIA_BOTTOM_CORTO, CATEGORIA_ZAPATOS, CATEGORIA_ACCESORIOS]
-
-
 def sugerir_outfit(
     usuario_id: int,
     temperatura: float,
@@ -67,90 +26,80 @@ def sugerir_outfit(
     db: Session,
 ) -> dict:
     """
-    Sugiere un outfit para el usuario.
+    Obtiene todas las prendas del usuario y le pide a GPT-4o
+    que arme el outfit más adecuado según clima y ocasión.
 
     Parámetros:
         usuario_id  : id del usuario autenticado
         temperatura : temperatura actual en °C
-        condiciones : lista de condiciones del clima seleccionadas
+        condiciones : lista de condiciones del clima
                       Ej: ["lloviendo", "corre_viento"]
         ocasion     : "universidad" | "trabajo" | "casual"
         db          : sesión de base de datos
 
     Retorna:
         {
+          "prenda_ids": [1, 3, 5],
           "prendas": [ { id, nombre, categoria_id, imagen_url, color }, ... ],
           "nivel_clima": "frio" | "templado" | "calor",
           "ocasion": str,
           "mensaje": str
         }
     """
-    categorias = _categorias_recomendadas(temperatura, condiciones)
-    nivel = _temperatura_a_nivel(temperatura)
-
-    # Traer todas las prendas del usuario que coincidan con las categorías
-    prendas_disponibles = (
+    prendas_db = (
         db.query(Prenda)
-        .filter(
-            Prenda.usuario_id == usuario_id,
-            Prenda.categoria_id.in_(categorias),
-        )
+        .filter(Prenda.usuario_id == usuario_id)
         .all()
     )
 
-    if not prendas_disponibles:
+    if not prendas_db:
         return {
+            "prenda_ids": [],
             "prendas": [],
-            "nivel_clima": nivel,
+            "nivel_clima": _temperatura_a_nivel(temperatura),
             "ocasion": ocasion,
-            "mensaje": "No tienes prendas cargadas para este clima. ¡Sube más ropa a tu closet!",
+            "mensaje": "No tienes prendas cargadas en tu closet. ¡Sube tu ropa primero!",
         }
 
-    # Seleccionar una prenda por categoría (la primera disponible)
-    # En futuras versiones: aplicar filtros de color/ocasión más sofisticados
-    seleccionadas = {}
-    for prenda in prendas_disponibles:
-        cat = prenda.categoria_id
-        if cat not in seleccionadas:
-            seleccionadas[cat] = prenda
+    prendas_lista = [
+        {
+            "id": p.id,
+            "nombre": p.nombre,
+            "color": p.color,
+            "categoria": p.categoria_id,
+            "ideal_clima": p.ideal_clima,
+            "imagen_url": p.imagen_url,
+        }
+        for p in prendas_db
+    ]
 
-    prendas_outfit = list(seleccionadas.values())
+    descripcion_clima = ", ".join(condiciones) if condiciones else "sin condiciones especiales"
 
-    # Construir mensaje personalizado según ocasión y clima
-    mensajes = {
-        "universidad": {
-            "frio":     "Para clases con este frío, te recomiendo abrigarte bien. ¡Llevas el look!",
-            "templado": "Día de universidad templado, look equilibrado y cómodo. ¡Tú puedes!",
-            "calor":    "Hace calor en la u hoy, algo fresco y cómodo es ideal.",
-        },
-        "trabajo": {
-            "frio":     "Reuniones con frío: elegante y abrigado/a. ¡Vas a impresionar!",
-            "templado": "Día de trabajo con clima perfecto. Look profesional listo.",
-            "calor":    "Calor en la oficina: fresco pero formal. ¡Excelente elección!",
-        },
-        "casual": {
-            "frio":     "Día casual con frío: comfy y estiloso/a. ¡Perfecto!",
-            "templado": "Clima ideal para un look casual. ¡Disfruta el día!",
-            "calor":    "Calorcito casual: ligero y con onda. ¡Que calor, pero qué look!",
-        },
-    }
+    resultado_ia = sugerir_outfit_ia(
+        prendas=prendas_lista,
+        temperatura=temperatura,
+        descripcion_clima=descripcion_clima,
+        ocasion=ocasion,
+    )
 
-    mensaje = mensajes.get(ocasion, {}).get(nivel, "¡Para lo que harás hoy, te recomiendo este outfit!")
+    prendas_seleccionadas = [
+        {
+            "id": p.id,
+            "nombre": p.nombre,
+            "categoria_id": p.categoria_id,
+            "imagen_url": p.imagen_url,
+            "color": p.color,
+        }
+        for p in prendas_db
+        if p.id in resultado_ia["prenda_ids"]
+    ]
 
     return {
-        "prendas": [
-            {
-                "id": p.id,
-                "nombre": p.nombre,
-                "categoria_id": p.categoria_id,
-                "imagen_url": p.imagen_url,
-                "color": p.color,
-            }
-            for p in prendas_outfit
-        ],
-        "nivel_clima": nivel,
+        "prenda_ids": resultado_ia["prenda_ids"],
+        "prendas": prendas_seleccionadas,
+        "nivel_clima": _temperatura_a_nivel(temperatura),
         "ocasion": ocasion,
-        "mensaje": mensaje,
+        "mensaje": resultado_ia["mensaje"],
     }
 
 
