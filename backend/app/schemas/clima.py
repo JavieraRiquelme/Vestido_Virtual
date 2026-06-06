@@ -8,7 +8,7 @@ class ClimaRead(BaseModel):
     id: int
     ciudad: str
     pais: str | None
-    temperatura: int | None
+    temperatura: float | None
     categoria: str | None
     descripcion: str | None
     consultado_at: datetime

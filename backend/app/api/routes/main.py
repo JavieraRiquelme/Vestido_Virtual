@@ -1,5 +1,7 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from app.api.routes import (
+    auth, 
     usuarios,
     prendas,
     categorias,
@@ -13,6 +15,15 @@ from app.api.routes import (
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://localhost:5173", "https://vercel.app"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_header=["*"],
+)
+
+app.include_router(auth.router,              prefix="/auth",              tags=["auth"])
 app.include_router(usuarios.router,          prefix="/usuarios",          tags=["usuarios"])
 app.include_router(prendas.router,           prefix="/prendas",           tags=["prendas"])
 app.include_router(categorias.router,        prefix="/categorias",        tags=["categorias"])

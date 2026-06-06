@@ -2,17 +2,17 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.schemas.categoria_prenda import CategoriaPrendaCreate
 from app.core.database import get_db
-from app.models.models import CategoriaPrenda
+from app.models.models import CategoriaPrenda, CategoriaPrendaRead
 
 router = APIRouter()
 
 
-@router.get("/")
+@router.get("/", response_model=list[CategoriaPrendaRead])
 def listar(db: Session = Depends(get_db)):
     return db.query(CategoriaPrenda).all()
 
 
-@router.get("/{categoria_id}")
+@router.get("/{categoria_id}", response_model=CategoriaPrendaRead)
 def obtener(categoria_id: int, db: Session = Depends(get_db)):
     categoria = db.query(CategoriaPrenda).filter(CategoriaPrenda.id == categoria_id).first()
     if not categoria:
@@ -20,7 +20,7 @@ def obtener(categoria_id: int, db: Session = Depends(get_db)):
     return categoria
 
 
-@router.post("/")
+@router.post("/", response_model=CategoriaPrendaRead)
 def crear(datos: CategoriaPrendaCreate, db: Session = Depends(get_db)):
     categoria = CategoriaPrenda(**datos.model_dump())
     db.add(categoria)
@@ -29,7 +29,7 @@ def crear(datos: CategoriaPrendaCreate, db: Session = Depends(get_db)):
     return categoria
 
 
-@router.put("/{categoria_id}")
+@router.put("/{categoria_id}", response_model=CategoriaPrendaRead)
 def actualizar(categoria_id: int, datos: CategoriaPrendaCreate, db: Session = Depends(get_db)):
     categoria = db.query(CategoriaPrenda).filter(CategoriaPrenda.id == categoria_id).first()
     if not categoria:

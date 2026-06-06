@@ -1,18 +1,18 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from app.schemas.ocasion import OcasionCreate
+from app.schemas.ocasion import OcasionCreate, OcasionRead
 from app.core.database import get_db
 from app.models.models import Ocasion
 
 router = APIRouter()
 
 
-@router.get("/")
+@router.get("/", response_model = list[OcasionRead])
 def listar(db: Session = Depends(get_db)):
     return db.query(Ocasion).all()
 
 
-@router.get("/{ocasion_id}")
+@router.get("/{ocasion_id}", response_model = OcasionRead)
 def obtener(ocasion_id: int, db: Session = Depends(get_db)):
     ocasion = db.query(Ocasion).filter(Ocasion.id == ocasion_id).first()
     if not ocasion:
@@ -20,7 +20,7 @@ def obtener(ocasion_id: int, db: Session = Depends(get_db)):
     return ocasion
 
 
-@router.post("/")
+@router.post("/", response_model = OcasionRead)
 def crear(datos: OcasionCreate, db: Session = Depends(get_db)):
     ocasion = Ocasion(**datos.model_dump())
     db.add(ocasion)
@@ -29,7 +29,7 @@ def crear(datos: OcasionCreate, db: Session = Depends(get_db)):
     return ocasion
 
 
-@router.put("/{ocasion_id}")
+@router.put("/{ocasion_id}", response_model = OcasionRead)
 def actualizar(ocasion_id: int, datos: OcasionCreate, db: Session = Depends(get_db)):
     ocasion = db.query(Ocasion).filter(Ocasion.id == ocasion_id).first()
     if not ocasion:

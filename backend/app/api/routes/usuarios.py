@@ -1,18 +1,17 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from app.schemas.usuario import UsuarioCreate
 from app.core.database import get_db
 from app.models.models import Usuario
+from app.schemas.usuario import UsuarioCreate, UsuarioRead
 
 router = APIRouter()
 
-
-@router.get("/")
+@router.get("/", response_model=list[UsuarioRead])
 def listar(db: Session = Depends(get_db)):
     return db.query(Usuario).all()
 
 
-@router.get("/{usuario_id}")
+@router.get("/{usuario_id}", response_model=UsuarioRead)
 def obtener(usuario_id: int, db: Session = Depends(get_db)):
     usuario = db.query(Usuario).filter(Usuario.id == usuario_id).first()
     if not usuario:
@@ -20,7 +19,7 @@ def obtener(usuario_id: int, db: Session = Depends(get_db)):
     return usuario
 
 
-@router.post("/")
+@router.post("/", response_model=UsuarioRead)
 def crear(datos: UsuarioCreate, db: Session = Depends(get_db)):
     existente = db.query(Usuario).filter(
         (Usuario.username == datos.username) | (Usuario.email == datos.email)
@@ -34,7 +33,7 @@ def crear(datos: UsuarioCreate, db: Session = Depends(get_db)):
     return usuario
 
 
-@router.put("/{usuario_id}")
+@router.put("/{usuario_id}", response_model=UsuarioRead)
 def actualizar(usuario_id: int, datos: UsuarioCreate, db: Session = Depends(get_db)):
     usuario = db.query(Usuario).filter(Usuario.id == usuario_id).first()
     if not usuario:

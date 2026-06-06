@@ -19,4 +19,8 @@ class Settings:
     APP_NAME: str = os.getenv("APP_NAME", "Closy")
     DEBUG: bool = os.getenv("DEBUG", "True") == "True"
 
+    JWT_SECRET_KEY: str = os.getenv("JWT_SECRET_KEY", "clave-local")
+    JWT_ALGORITHM: str = "HS256"
+    JWT_EXPIRE_MINUTES: int = 1440
+
 settings = Settings()

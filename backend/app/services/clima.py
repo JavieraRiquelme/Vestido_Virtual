@@ -66,28 +66,3 @@ def obtener_clima_gps(lat: float, lon: float) -> dict:
         "icono": data["weather"][0]["icon"],
         "consultado_at": datetime.now(),
     }
-
-
-def sugerir_outfit(ciudad: str, ocasion: str) -> dict:
-    clima = obtener_clima(ciudad)
-
-    if clima["categoria"] == "frio":
-        sugerencia = "chaqueta, pantalón largo y zapatos cerrados"
-    elif clima["categoria"] == "templado":
-        sugerencia = "polera, jeans y zapatillas"
-    else:
-        sugerencia = "vestido liviano o shorts y sandalias"
-
-    return {
-        "nombre": f"Outfit {clima['categoria']} {ocasion}",
-        "ciudad": clima["ciudad"],
-        "pais": clima["pais"],
-        "temperatura": clima["temperatura"],
-        "ideal_clima": clima["categoria"],
-        "descripcion": clima["descripcion"],
-        "icono": clima["icono"],
-        "consultado_at": clima["consultado_at"],
-        "ocasion": ocasion,
-        "sugerencia": sugerencia,
-        "rating": None,
-    }
