@@ -26,7 +26,6 @@ def obtener_clima(ciudad: str) -> dict:
         raise Exception(f"Ciudad '{ciudad}' no encontrada")
     if response.status_code != 200:
         raise Exception(f"Error al obtener el clima: {response.status_code}")
-
     data = response.json()
     temperatura = round(data["main"]["temp"], 1)
     return {
@@ -54,7 +53,6 @@ def obtener_clima_gps(lat: float, lon: float) -> dict:
     )
     if response.status_code != 200:
         raise Exception(f"Error al obtener el clima: {response.status_code}")
-
     data = response.json()
     temperatura = round(data["main"]["temp"], 1)
     return {

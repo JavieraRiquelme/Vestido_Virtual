@@ -13,14 +13,14 @@ from app.api.routes import (
     sugerencias,
 )
 
-app = FastAPI()
+app = FastAPI(title="Closy API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://localhost:5173", "https://vercel.app"],
+    allow_origins=["http://localhost:5173", "https://tu-app.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
-    allow_header=["*"],
+    allow_headers=["*"],
 )
 
 app.include_router(auth.router,              prefix="/auth",              tags=["auth"])
