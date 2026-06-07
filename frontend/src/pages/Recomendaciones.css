@@ -1,201 +1,378 @@
-/* Recomendaciones.css — Estilos Tab III
-   Paleta: lavanda suave, morado Closy (#9b5de5), blanco, tipografía Nunito
-   Isidora — Sprint 2
-*/
-
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
-
+/* ── Layout ─────────────────────────────────────────────────────── */
 .recomendaciones {
-  font-family: 'Nunito', sans-serif;
   min-height: 100vh;
-  background: #f3eaff;
-  padding: 24px 16px 100px;
-  max-width: 480px;
+  background: var(--bg);
+  padding: var(--page-pt) var(--page-px) var(--page-pb);
+  max-width: 520px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--gap);
 }
 
-/* Título */
+@media (min-width: 640px) { .recomendaciones { max-width: 680px; } }
+@media (min-width: 1024px) { .recomendaciones { max-width: 800px; } }
+
+/* ── Header ─────────────────────────────────────────────────────── */
+.recomendaciones__header {
+  margin-bottom: 4px;
+}
+
 .recomendaciones__titulo {
-  font-size: 1.6rem;
-  font-weight: 800;
-  color: #3d1f6e;
-  text-align: center;
+  font-size: 1.9rem;
+  font-weight: 900;
+  color: #2d1560;
   margin: 0 0 4px;
+  letter-spacing: -0.02em;
 }
 
-/* Cards */
-.recomendaciones__card {
-  background: #ffffff;
-  border-radius: 18px;
-  padding: 18px 16px;
-  box-shadow: 0 2px 12px rgba(155, 93, 229, 0.10);
-}
-
-.recomendaciones__card-label {
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: #9b8ab8;
-  text-transform: uppercase;
-  margin: 0 0 6px;
-}
-
-.recomendaciones__card-sublabel {
-  font-size: 0.85rem;
-  color: #6b5b8a;
-  margin: 0 0 12px;
-}
-
-/* Temperatura */
-.recomendaciones__temp-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 14px;
-}
-
-.recomendaciones__temp-emoji {
-  font-size: 2rem;
-}
-
-.recomendaciones__temp-input {
-  width: 70px;
-  font-size: 1.5rem;
-  font-weight: 700;
-  font-family: 'Nunito', sans-serif;
-  color: #3d1f6e;
-  border: none;
-  background: #f3eaff;
-  border-radius: 10px;
-  padding: 6px 10px;
-  text-align: center;
-  outline: none;
-}
-
-.recomendaciones__temp-input:focus {
-  box-shadow: 0 0 0 2px #9b5de5;
-}
-
-.recomendaciones__temp-unidad {
-  font-size: 1rem;
-  color: #9b8ab8;
+.recomendaciones__subtitulo {
+  font-size: 0.95rem;
+  color: #8b6fb3;
+  margin: 0;
   font-weight: 600;
 }
 
-/* Barra */
-.recomendaciones__barra-wrap {
+/* ── Cards ───────────────────────────────────────────────────────── */
+.recomendaciones__card {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: var(--card-py) var(--card-px);
+  box-shadow: var(--shadow-card);
+}
+
+.recomendaciones__pregunta {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #2d1560;
+  margin: 0 0 14px;
+}
+
+.recomendaciones__hint {
+  font-size: 0.8rem;
+  color: #a98ad4;
+  font-weight: 600;
+  margin: -8px 0 14px;
+}
+
+/* ── Buscador ciudad ─────────────────────────────────────────────── */
+.recomendaciones__buscador {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
 }
 
-.recomendaciones__barra {
-  -webkit-appearance: none;
-  width: 100%;
-  height: 6px;
-  border-radius: 3px;
-  background: linear-gradient(to right, #74c0fc, #f4c542, #ff6b6b);
-  outline: none;
-  cursor: pointer;
-}
-
-.recomendaciones__barra::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: #9b5de5;
-  box-shadow: 0 2px 6px rgba(155, 93, 229, 0.4);
-  cursor: pointer;
-  transition: transform 0.15s;
-}
-
-.recomendaciones__barra::-webkit-slider-thumb:hover {
-  transform: scale(1.2);
-}
-
-.recomendaciones__barra-labels {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.68rem;
-  color: #9b8ab8;
-  font-weight: 600;
-}
-
-/* Selector clima (estilos del componente SelectorClima) */
-.selector-clima__label {
-  font-size: 0.7rem;
+.recomendaciones__buscador-label {
+  font-size: 0.78rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
-  color: #9b8ab8;
+  color: #a98ad4;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
-  margin: 0 0 12px;
 }
 
-.selector-clima__grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
+.recomendaciones__ciudad-separador {
+  height: 1px;
+  background: #f0e6ff;
+  margin: 14px 0;
 }
 
-.selector-clima__btn {
+.recomendaciones__ciudad-wrap {
+  position: relative;
+}
+
+.recomendaciones__ciudad-row {
+  display: flex;
+  gap: 8px;
+}
+
+.recomendaciones__ciudad-input {
+  flex: 1;
+  padding: 11px 14px;
+  border: 1.5px solid #e4d4f9;
+  border-radius: 14px;
+  font-size: 0.95rem;
+  font-family: 'Nunito', sans-serif;
+  color: #2d1560;
+  background: #faf5ff;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.recomendaciones__ciudad-input:focus {
+  border-color: #9b5de5;
+  background: #fff;
+}
+
+.recomendaciones__ciudad-btn--gps {
+  background: #f0e6ff;
+  color: #7c3aed;
+  padding: 11px 13px;
+  border: none;
+  border-radius: 14px;
+  font-size: 1rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+.recomendaciones__ciudad-btn--gps:hover:not(:disabled) {
+  background: #e4d4f9;
+}
+
+.recomendaciones__ciudad-btn--gps:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.recomendaciones__ciudad-error {
+  font-size: 0.82rem;
+  color: #dc2626;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Dropdown autocomplete */
+.recomendaciones__dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1.5px solid #d8b4fe;
+  border-radius: 14px;
+  overflow: hidden;
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+  box-shadow: 0 8px 24px rgba(107, 33, 168, 0.14);
+  z-index: 50;
+}
+
+.recomendaciones__dropdown-item {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.recomendaciones__dropdown-item:hover {
+  background: #f3e8ff;
+}
+
+.recomendaciones__dropdown-nombre {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #2d1560;
+}
+
+.recomendaciones__dropdown-meta {
+  font-size: 0.78rem;
+  color: #a98ad4;
+}
+
+/* Clima resultado */
+.recomendaciones__clima-resultado {
   display: flex;
   align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, #f0e6ff 0%, #e9d5ff 100%);
+  border-radius: 14px;
+  padding: 12px 16px;
+}
+
+.recomendaciones__clima-emoji {
+  font-size: 1.8rem;
+  flex-shrink: 0;
+}
+
+.recomendaciones__clima-ciudad {
+  font-weight: 800;
+  font-size: 1rem;
+  color: #2d1560;
+  margin: 0;
+}
+
+.recomendaciones__clima-detalle {
+  font-size: 0.82rem;
+  color: #7c3aed;
+  margin: 0;
+  font-weight: 600;
+}
+
+/* ── Slider temperatura ──────────────────────────────────────────── */
+.recomendaciones__slider-wrap {
+  display: flex;
+  flex-direction: column;
   gap: 8px;
-  background: #f8f4ff;
+}
+
+.recomendaciones__slider-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.recomendaciones__slider-valor {
+  font-size: 1.3rem;
+  font-weight: 900;
+  transition: color 0.3s;
+}
+
+.recomendaciones__slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 50px;
+  background: linear-gradient(to right, #93c5fd 0%, #c4b5fd 40%, #fb923c 100%);
+  outline: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.recomendaciones__slider:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.recomendaciones__slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid #9b5de5;
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.3);
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.15s;
+}
+
+.recomendaciones__slider:not(:disabled)::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+
+.recomendaciones__slider::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid #9b5de5;
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.3);
+  cursor: pointer;
+}
+
+.recomendaciones__slider-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #a98ad4;
+}
+
+/* ── Prenda fija ─────────────────────────────────────────────────── */
+.recomendaciones__prendas-scroll {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+}
+
+.recomendaciones__prendas-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.recomendaciones__prenda-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  background: #faf5ff;
   border: 1.5px solid #e4d4f9;
-  border-radius: 12px;
-  padding: 10px 12px;
+  border-radius: 50px;
+  padding: 7px 14px;
   font-family: 'Nunito', sans-serif;
   font-size: 0.85rem;
-  font-weight: 600;
+  font-weight: 700;
   color: #5a3e82;
   cursor: pointer;
-  transition: all 0.18s ease;
+  transition: all 0.15s ease;
 }
 
-.selector-clima__btn:hover {
+.recomendaciones__prenda-chip:hover {
   border-color: #9b5de5;
   background: #ede0ff;
 }
 
-.selector-clima__btn--activo {
-  background: #ede0ff;
-  border-color: #9b5de5;
-  color: #3d1f6e;
-  box-shadow: 0 2px 8px rgba(155, 93, 229, 0.2);
+.recomendaciones__prenda-chip--activo {
+  background: #2d1560;
+  border-color: #2d1560;
+  color: #fff;
 }
 
-.selector-clima__emoji {
-  font-size: 1.2rem;
+.recomendaciones__prenda-color {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,0,0,0.15);
+  flex-shrink: 0;
 }
 
-/* Ocasiones */
-.recomendaciones__ocasiones {
+/* ── Estilos ─────────────────────────────────────────────────────── */
+.recomendaciones__estilos {
   display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.recomendaciones__estilo-chip {
+  background: #faf5ff;
+  border: 1.5px solid #e4d4f9;
+  border-radius: 50px;
+  padding: 8px 18px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #5a3e82;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.recomendaciones__estilo-chip:hover {
+  border-color: #9b5de5;
+  background: #ede0ff;
+}
+
+.recomendaciones__estilo-chip--activo {
+  background: #9b5de5;
+  border-color: #9b5de5;
+  color: #fff;
+  box-shadow: 0 3px 10px rgba(155, 93, 229, 0.3);
+}
+
+/* ── Ocasiones ───────────────────────────────────────────────────── */
+.recomendaciones__ocasiones {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 10px;
-  justify-content: space-between;
 }
 
 .recomendaciones__ocasion-btn {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  background: #f8f4ff;
+  background: #faf5ff;
   border: 1.5px solid #e4d4f9;
-  border-radius: 14px;
+  border-radius: 16px;
   padding: 14px 8px;
   font-family: 'Nunito', sans-serif;
-  font-size: 0.82rem;
+  font-size: 0.88rem;
   font-weight: 700;
   color: #5a3e82;
   cursor: pointer;
   transition: all 0.18s ease;
+  text-align: center;
 }
 
 .recomendaciones__ocasion-btn:hover {
@@ -204,60 +381,30 @@
 }
 
 .recomendaciones__ocasion-btn--activo {
-  background: #9b5de5;
-  border-color: #9b5de5;
-  color: #fff;
-  box-shadow: 0 4px 14px rgba(155, 93, 229, 0.35);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
 }
 
-.recomendaciones__ocasion-emoji {
-  font-size: 1.6rem;
-}
-
-/* Error */
+/* ── Botones ─────────────────────────────────────────────────────── */
 .recomendaciones__error {
   background: #ffe4e4;
   color: #c0392b;
-  border-radius: 10px;
-  padding: 10px 14px;
-  font-size: 0.85rem;
-  font-weight: 600;
+  border-radius: 12px;
+  padding: 10px 16px;
+  font-size: 0.88rem;
+  font-weight: 700;
   margin: 0;
 }
 
-/* Acciones + Closy mascota */
-.recomendaciones__acciones {
-  display: flex;
-  align-items: flex-end;
-  gap: 12px;
-  margin-top: 8px;
-}
-
-.recomendaciones__closy {
-  flex-shrink: 0;
-}
-
-.recomendaciones__closy-mascota {
-  font-size: 3rem;
-  display: block;
-  animation: closy-float 3s ease-in-out infinite;
-}
-
-@keyframes closy-float {
-  0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(-8px); }
-}
-
 .recomendaciones__botones {
-  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  padding-top: 4px;
 }
 
 .recomendaciones__btn {
   width: 100%;
-  padding: 14px;
+  padding: 15px;
   border-radius: 50px;
   border: none;
   font-family: 'Nunito', sans-serif;
@@ -265,30 +412,32 @@
   font-weight: 800;
   cursor: pointer;
   transition: all 0.18s ease;
+  letter-spacing: 0.01em;
 }
 
 .recomendaciones__btn:disabled {
-  opacity: 0.6;
+  opacity: 0.55;
   cursor: not-allowed;
 }
 
 .recomendaciones__btn--principal {
-  background: #9b5de5;
+  background: linear-gradient(135deg, #9b5de5 0%, #7c3aed 100%);
   color: #fff;
-  box-shadow: 0 4px 16px rgba(155, 93, 229, 0.4);
+  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.38);
 }
 
 .recomendaciones__btn--principal:hover:not(:disabled) {
-  background: #7c3fcf;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(155, 93, 229, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(124, 58, 237, 0.48);
 }
 
 .recomendaciones__btn--secundario {
-  background: #ede0ff;
-  color: #5a3e82;
+  background: #fff;
+  color: #7c3aed;
+  border: 1.5px solid #e4d4f9;
 }
 
 .recomendaciones__btn--secundario:hover:not(:disabled) {
-  background: #dfc8ff;
+  background: #f3e8ff;
+  border-color: #c4b5fd;
 }

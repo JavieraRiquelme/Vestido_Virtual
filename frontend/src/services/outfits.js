@@ -5,21 +5,13 @@ const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 /**
  * Solicita una sugerencia de outfit al asistente Closy.
- * @param {number} usuarioId
- * @param {number} temperatura - en °C
- * @param {string[]} condiciones - ["lloviendo", "corre_viento", "sol_fuerte", "nublado"]
- * @param {string} ocasion - "universidad" | "trabajo" | "casual"
+ * @param {{ usuario_id, ocasion, ciudad_origen?, ciudad_destino?, temperatura?, condiciones? }} params
  */
-export async function pedirSugerencia(usuarioId, temperatura, condiciones, ocasion) {
+export async function pedirSugerencia(params) {
   const res = await fetch(`${BASE_URL}/sugerencias/sugerir`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      usuario_id: usuarioId,
-      temperatura,
-      condiciones,
-      ocasion,
-    }),
+    body: JSON.stringify(params),
   });
   if (!res.ok) {
     const error = await res.json();

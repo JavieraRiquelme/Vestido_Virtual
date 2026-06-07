@@ -1,211 +1,208 @@
-/* MisOutfits.css — Isidora — Sprint 3 */
-
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
-
-.mis-outfits {
-  font-family: 'Nunito', sans-serif;
-  min-height: 100vh;
-  background: #f3eaff;
-  padding: 24px 16px 100px;
-  max-width: 480px;
+/* ── Mis Outfits — galería estilo Pinterest ─────────────────────────────── */
+.outfits {
+  padding: var(--page-pt) var(--gap) var(--page-pb);
+  max-width: 1280px;
   margin: 0 auto;
 }
 
-.mis-outfits__header {
+/* Header */
+.outfits__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 20px;
 }
 
-.mis-outfits__titulo {
-  font-size: 1.6rem;
-  font-weight: 800;
-  color: #3d1f6e;
+.outfits__titulo {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: var(--brand-dark);
   margin: 0;
 }
 
-.mis-outfits__btn-nuevo {
-  background: #9b5de5;
+.outfits__btn-nuevo {
+  background: var(--brand);
   color: #fff;
   border: none;
   border-radius: 50px;
-  padding: 10px 18px;
-  font-family: 'Nunito', sans-serif;
+  padding: 7px 18px;
+  font-size: 0.82rem;
   font-weight: 700;
-  font-size: 0.9rem;
   cursor: pointer;
-  transition: background 0.18s;
+  transition: background 0.15s, transform 0.1s;
 }
+.outfits__btn-nuevo:hover { background: var(--brand-dark); transform: scale(1.03); }
 
-.mis-outfits__btn-nuevo:hover {
-  background: #7c3fcf;
-}
-
-/* Cargando */
-.mis-outfits__cargando {
-  text-align: center;
-  padding: 60px 0;
-  color: #6b5b8a;
-}
-
-.mis-outfits__spinner {
-  font-size: 3rem;
-  display: block;
-  animation: closy-float 1.5s ease-in-out infinite;
-  margin-bottom: 12px;
-}
-
-@keyframes closy-float {
-  0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(-8px); }
-}
-
-/* Vacío */
-.mis-outfits__vacio {
-  text-align: center;
-  padding: 60px 0;
-  color: #6b5b8a;
-}
-
-.mis-outfits__vacio-emoji {
-  font-size: 4rem;
-  display: block;
-  margin-bottom: 12px;
-}
-
-.mis-outfits__vacio p {
-  margin: 4px 0;
-  font-size: 0.95rem;
-}
-
-.mis-outfits__btn-crear {
-  margin-top: 20px;
-  background: #9b5de5;
-  color: #fff;
-  border: none;
-  border-radius: 50px;
-  padding: 12px 28px;
-  font-family: 'Nunito', sans-serif;
-  font-weight: 700;
-  font-size: 0.95rem;
-  cursor: pointer;
-  transition: background 0.18s;
-}
-
-.mis-outfits__btn-crear:hover {
-  background: #7c3fcf;
-}
-
-/* Error */
-.mis-outfits__error {
-  background: #ffe4e4;
-  color: #c0392b;
-  border-radius: 10px;
-  padding: 10px 14px;
+/* Estados */
+.outfits__error {
+  color: #dc2626;
   font-size: 0.85rem;
-  font-weight: 600;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
-/* Grid */
-.mis-outfits__grid {
+.outfits__cargando {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 60px 0;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+.outfits__spinner {
+  font-size: 2rem;
+  animation: spin 1.6s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.outfits__vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 60px 0;
+  color: var(--text-secondary);
+  text-align: center;
+  font-size: 0.9rem;
+}
+.outfits__vacio span { font-size: 2.5rem; }
+.outfits__vacio button {
+  margin-top: 10px;
+  background: var(--brand);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 9px 22px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.outfits__vacio button:hover { background: var(--brand-dark); }
+
+/* ── Galería ─────────────────────────────────────────── */
+.outfits__galeria {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 12px;
 }
 
-/* Card */
-.mis-outfits__card {
-  background: #fff;
+@media (min-width: 540px) {
+  .outfits__galeria { grid-template-columns: repeat(3, 1fr); gap: 14px; }
+}
+@media (min-width: 900px) {
+  .outfits__galeria { grid-template-columns: repeat(4, 1fr); gap: 16px; }
+}
+@media (min-width: 1200px) {
+  .outfits__galeria { grid-template-columns: repeat(5, 1fr); gap: 18px; }
+}
+
+/* ── Tarjeta ─────────────────────────────────────────── */
+.outfits__card {
+  position: relative;
   border-radius: 16px;
-  padding: 16px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  box-shadow: 0 2px 12px rgba(155, 93, 229, 0.10);
-  transition: transform 0.15s;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(107,33,168,0.12);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.outfits__card:hover {
+  transform: translateY(-5px) scale(1.01);
+  box-shadow: 0 14px 36px rgba(107,33,168,0.25);
 }
 
-.mis-outfits__card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 18px rgba(155, 93, 229, 0.18);
+/* Imagen real */
+.outfits__card-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.mis-outfits__card-clima {
-  font-size: 2.2rem;
-  flex-shrink: 0;
-  width: 52px;
-  height: 52px;
-  background: #f3eaff;
-  border-radius: 12px;
+/* Gradiente fallback */
+.outfits__card-grad {
+  position: absolute;
+  inset: 0;
+}
+
+/* Patrón de puntos sobre el gradiente */
+.outfits__card-dots {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.18) 1.2px, transparent 1.2px);
+  background-size: 18px 18px;
+}
+
+/* ── Botón eliminar ─── */
+.outfits__card-del {
+  position: absolute;
+  top: 9px;
+  right: 9px;
+  z-index: 3;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(6px);
+  border: none;
+  color: #fff;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  opacity: 0;
+  transition: opacity 0.15s, background 0.15s;
+}
+.outfits__card:hover .outfits__card-del { opacity: 1; }
+.outfits__card-del:hover:not(:disabled) { background: rgba(220,38,38,0.85); }
+.outfits__card-del:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* En mobile el botón es siempre visible (no hay hover) */
+@media (hover: none) {
+  .outfits__card-del { opacity: 0.75; }
 }
 
-.mis-outfits__card-info {
-  flex: 1;
-  min-width: 0;
+/* ── Info overlay ─── */
+.outfits__card-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  padding: 44px 12px 12px;
+  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
 }
 
-.mis-outfits__card-nombre {
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: #3d1f6e;
+.outfits__card-nombre {
   margin: 0 0 6px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #fff;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.5);
 }
 
-.mis-outfits__card-tags {
+.outfits__card-chips {
   display: flex;
-  gap: 6px;
   flex-wrap: wrap;
-  margin-bottom: 4px;
+  gap: 4px;
 }
 
-.mis-outfits__tag {
-  font-size: 0.7rem;
+.outfits__chip {
+  font-size: 0.62rem;
   font-weight: 700;
+  color: #fff;
+  background: rgba(255,255,255,0.22);
+  backdrop-filter: blur(6px);
   border-radius: 50px;
-  padding: 2px 10px;
+  padding: 2px 8px;
 }
 
-.mis-outfits__tag--ocasion {
-  background: #ede0ff;
-  color: #5a3e82;
-}
-
-.mis-outfits__tag--clima {
-  background: #e0f0ff;
-  color: #1a5c8a;
-}
-
-.mis-outfits__card-fecha {
-  font-size: 0.72rem;
-  color: #9b8ab8;
-  margin: 0;
-}
-
-/* Botón eliminar */
-.mis-outfits__btn-eliminar {
-  flex-shrink: 0;
-  background: none;
-  border: none;
-  font-size: 1.3rem;
-  cursor: pointer;
-  padding: 6px;
-  border-radius: 8px;
-  transition: background 0.15s;
-}
-
-.mis-outfits__btn-eliminar:hover:not(:disabled) {
-  background: #ffe4e4;
-}
-
-.mis-outfits__btn-eliminar:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+.outfits__chip--clima {
+  background: rgba(255,255,255,0.14);
 }

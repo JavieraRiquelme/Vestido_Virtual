@@ -27,4 +27,14 @@ class Settings:
     JWT_ALGORITHM: str = "HS256"
     JWT_EXPIRE_MINUTES: int = 1440
 
+    # CORS — lista separada por comas en la env var ALLOWED_ORIGINS
+    ALLOWED_ORIGINS: list = [
+        o.strip()
+        for o in os.getenv(
+            "ALLOWED_ORIGINS",
+            "http://localhost:5173,http://localhost:3000"
+        ).split(",")
+        if o.strip()
+    ]
+
 settings = Settings()

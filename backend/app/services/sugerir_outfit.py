@@ -24,6 +24,10 @@ def sugerir_outfit(
     condiciones: list[str],
     ocasion: str,
     db: Session,
+    clima_origen: dict | None = None,
+    clima_destino: dict | None = None,
+    prenda_fija_id: int | None = None,
+    estilo: str | None = None,
 ) -> dict:
     """
     Obtiene todas las prendas del usuario y le pide a GPT-4o
@@ -75,11 +79,36 @@ def sugerir_outfit(
 
     descripcion_clima = ", ".join(condiciones) if condiciones else "sin condiciones especiales"
 
+    # Armar contexto de ciudades para el prompt
+    contexto_ciudades = None
+    if clima_origen or clima_destino:
+        partes = []
+        if clima_origen:
+            partes.append(
+                f"Origen ({clima_origen['ciudad']}, {clima_origen.get('pais','')}): "
+                f"{clima_origen['temperatura']}°C, {clima_origen['descripcion']}"
+            )
+        if clima_destino:
+            partes.append(
+                f"Destino ({clima_destino['ciudad']}, {clima_destino.get('pais','')}): "
+                f"{clima_destino['temperatura']}°C, {clima_destino['descripcion']}"
+            )
+        contexto_ciudades = " → ".join(partes)
+
+    prenda_fija = None
+    if prenda_fija_id:
+        pf = db.query(Prenda).filter(Prenda.id == prenda_fija_id).first()
+        if pf:
+            prenda_fija = {"id": pf.id, "nombre": pf.nombre, "color": pf.color, "categoria": pf.categoria_id}
+
     resultado_ia = sugerir_outfit_ia(
         prendas=prendas_lista,
         temperatura=temperatura,
         descripcion_clima=descripcion_clima,
         ocasion=ocasion,
+        contexto_ciudades=contexto_ciudades,
+        prenda_fija=prenda_fija,
+        estilo=estilo,
     )
 
     prendas_seleccionadas = [

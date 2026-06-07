@@ -1,20 +1,16 @@
-/* ResultadoOutfit.css — Estilos pantalla de resultado
-   Isidora — Sprint 3
-*/
-
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
-
 .resultado {
-  font-family: 'Nunito', sans-serif;
   min-height: 100vh;
-  background: #f3eaff;
-  padding: 24px 16px 100px;
-  max-width: 480px;
+  background: var(--bg);
+  padding: var(--page-pt) var(--page-px) var(--page-pb);
+  max-width: 520px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
 }
+
+@media (min-width: 640px) { .resultado { max-width: 700px; } }
+@media (min-width: 1024px) { .resultado { max-width: 860px; } }
 
 /* Header: Closy + burbuja */
 .resultado__header {
@@ -52,17 +48,17 @@
 
 /* Grid de prendas */
 .resultado__prendas {
-  background: #fff;
-  border-radius: 18px;
-  padding: 18px;
-  box-shadow: 0 2px 12px rgba(155, 93, 229, 0.10);
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: var(--card-py) var(--card-px);
+  box-shadow: var(--shadow-card);
   min-height: 180px;
 }
 
 .resultado__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: var(--gap);
 }
 
 .resultado__prenda-card {
@@ -195,11 +191,20 @@
   transform: translateY(-1px);
 }
 
+.resultado__btn--pizarron {
+  background: #fff;
+  color: var(--brand-dark);
+  border: 1.5px solid var(--border-mid);
+}
+.resultado__btn--pizarron:hover:not(:disabled) {
+  background: var(--surface-hover);
+  border-color: var(--brand);
+}
+
 .resultado__btn--otro {
   background: #ede0ff;
   color: #5a3e82;
 }
-
 .resultado__btn--otro:hover {
   background: #dfc8ff;
 }

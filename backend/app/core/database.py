@@ -3,7 +3,10 @@ from sqlalchemy.orm import sessionmaker
 from supabase import create_client, Client
 from app.core.config import settings
 
-engine = create_engine(settings.DATABASE_URL)
+engine = create_engine(
+    settings.DATABASE_URL,
+    connect_args={"connect_timeout": 5},
+)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 

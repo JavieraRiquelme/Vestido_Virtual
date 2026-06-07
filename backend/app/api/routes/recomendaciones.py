@@ -1,18 +1,18 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from app.schemas.recomendacion import RecomendacionCreate
+from app.schemas.recomendacion import RecomendacionCreate, RecomendacionRead
 from app.core.database import get_db
 from app.models.models import Recomendacion
 
 router = APIRouter()
 
 
-@router.get("/")
+@router.get("/", response_model=list[RecomendacionRead])
 def listar(db: Session = Depends(get_db)):
     return db.query(Recomendacion).all()
 
 
-@router.get("/{recomendacion_id}")
+@router.get("/{recomendacion_id}", response_model=RecomendacionRead)
 def obtener(recomendacion_id: int, db: Session = Depends(get_db)):
     rec = db.query(Recomendacion).filter(Recomendacion.id == recomendacion_id).first()
     if not rec:
@@ -20,12 +20,12 @@ def obtener(recomendacion_id: int, db: Session = Depends(get_db)):
     return rec
 
 
-@router.get("/usuario/{usuario_id}")
+@router.get("/usuario/{usuario_id}", response_model=list[RecomendacionRead])
 def listar_por_usuario(usuario_id: int, db: Session = Depends(get_db)):
     return db.query(Recomendacion).filter(Recomendacion.usuario_id == usuario_id).all()
 
 
-@router.post("/")
+@router.post("/", response_model=RecomendacionRead)
 def crear(datos: RecomendacionCreate, db: Session = Depends(get_db)):
     rec = Recomendacion(**datos.model_dump())
     db.add(rec)
@@ -34,7 +34,7 @@ def crear(datos: RecomendacionCreate, db: Session = Depends(get_db)):
     return rec
 
 
-@router.put("/{recomendacion_id}/rating")
+@router.put("/{recomendacion_id}/rating", response_model=RecomendacionRead)
 def calificar(recomendacion_id: int, rating: int, db: Session = Depends(get_db)):
     rec = db.query(Recomendacion).filter(Recomendacion.id == recomendacion_id).first()
     if not rec:

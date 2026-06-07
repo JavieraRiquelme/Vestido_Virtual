@@ -1,0 +1,433 @@
+/* ── Shell ──────────────────────────────────────────────────────── */
+.piz {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 99;           /* NavBar pill es z-index:100 → flota encima */
+  display: flex;
+  flex-direction: column;
+  font-family: 'Nunito', sans-serif;
+  background: #fff;
+}
+
+/* En mobile dejamos espacio para la NavBar pill */
+@media (max-width: 639px) {
+  .piz { bottom: var(--page-pb); }
+}
+
+/* ── Header ─────────────────────────────────────────────────────── */
+.piz__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: var(--surface);
+  border-bottom: 1.5px solid var(--border);
+  flex-shrink: 0;
+  gap: 10px;
+}
+
+.piz__volver {
+  background: none;
+  border: none;
+  color: var(--brand-dark);
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 5px 9px;
+  border-radius: var(--radius-sm);
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+.piz__volver:hover { background: var(--surface-hover); }
+
+.piz__titulo {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text);
+  flex: 1;
+  text-align: center;
+}
+
+.piz__export-btn {
+  background: var(--brand);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: 6px 14px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, opacity 0.15s;
+}
+.piz__export-btn:hover:not(:disabled) { background: var(--brand-dark); }
+.piz__export-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* ── Body ───────────────────────────────────────────────────────── */
+.piz__body {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ── Panel izquierdo (≥ 640px) ──────────────────────────────────── */
+.piz__panel { display: none; }
+
+@media (min-width: 640px) {
+  .piz__panel {
+    display: flex;
+    flex-direction: column;
+    width: 210px;
+    flex-shrink: 0;
+    background: var(--surface);
+    border-right: 1.5px solid var(--border);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-mid) transparent;
+  }
+}
+
+.piz__sec {
+  padding: 14px 12px 12px;
+  border-bottom: 1.5px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.piz__sec-title {
+  font-size: 0.66rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.piz__sec-empty { font-size: 0.8rem; color: var(--text-muted); }
+
+/* Filas de prenda en panel */
+.piz__prenda-row {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--surface-soft);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 6px 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: 'Nunito', sans-serif;
+  text-align: left; width: 100%;
+}
+.piz__prenda-row:hover { border-color: var(--brand); background: var(--surface-hover); }
+
+.piz__prenda-row img,
+.piz__prenda-ph {
+  width: 34px; height: 34px; border-radius: 6px; object-fit: cover; flex-shrink: 0;
+}
+.piz__prenda-ph {
+  background: var(--surface-hover);
+  display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+}
+.piz__prenda-row span {
+  font-size: 0.78rem; font-weight: 700; color: var(--text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.piz__closet-btn {
+  background: none;
+  border: 1.5px dashed var(--border-mid);
+  border-radius: var(--radius-md);
+  color: var(--brand-dark);
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.8rem; font-weight: 700;
+  padding: 7px; cursor: pointer; transition: all 0.15s;
+}
+.piz__closet-btn:hover { border-color: var(--brand); background: var(--surface-hover); }
+
+/* Filas de forma */
+.piz__shape-row {
+  display: flex; align-items: center; gap: 9px;
+  background: var(--surface-soft);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 7px 9px; cursor: pointer; transition: all 0.15s;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.8rem; font-weight: 700; color: var(--text-soft);
+}
+.piz__shape-row:hover:not(:disabled) { border-color: var(--brand); background: var(--surface-hover); color: var(--brand-dark); }
+.piz__shape-row--act { background: var(--brand); border-color: var(--brand); color: #fff; }
+.piz__shape-row--act .piz__ico { background: #fff; }
+.piz__shape-row--act .piz__ico--libre { border-color: #fff; background: transparent; }
+.piz__shape-row:disabled { opacity: 0.35; cursor: not-allowed; }
+
+/* Grid fondos en panel */
+.piz__fondo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.piz__fondo-btn {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  border: 2px solid var(--border);
+  cursor: pointer;
+  transition: all 0.15s;
+  min-height: 36px;
+}
+.piz__fondo-btn:hover { border-color: var(--brand); }
+.piz__fondo-btn--act {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 2px var(--brand);
+}
+
+/* Botones de acción */
+.piz__act-btn {
+  background: var(--surface-soft);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-soft);
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.82rem; font-weight: 700;
+  padding: 9px; cursor: pointer; transition: all 0.15s;
+}
+.piz__act-btn:hover:not(:disabled) { background: var(--surface-hover); border-color: var(--brand); color: var(--brand-dark); }
+.piz__act-btn--del { color: #dc2626; border-color: #fecaca; background: #fef2f2; }
+.piz__act-btn--del:hover:not(:disabled) { background: #fee2e2; border-color: #fca5a5; }
+.piz__act-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+/* ── Canvas ─────────────────────────────────────────────────────── */
+.piz__canvas {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  /* background viene del style inline (fondo dinámico) */
+  background-color: #fff;
+  background-image: radial-gradient(circle,#c8b6e2 1.2px,transparent 1.2px);
+  background-size: 22px 22px;
+}
+
+.piz__empty {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  pointer-events: none;
+}
+.piz__empty p {
+  color: rgba(200,182,226,0.8);
+  font-size: 0.95rem; font-weight: 700;
+  text-align: center; max-width: 200px; line-height: 1.5;
+}
+
+/* ── Ítems ──────────────────────────────────────────────────────── */
+.piz__item {
+  position: absolute;
+  cursor: grab;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+}
+.piz__item:active { cursor: grabbing; }
+
+.piz__item--sel .piz__img-wrap {
+  outline: 2.5px solid var(--brand);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+.piz__img-wrap { position: relative; width: 100%; flex-shrink: 0; }
+
+.piz__img, .piz__img-ph {
+  width: 100%; height: 100%;
+  object-fit: cover; border-radius: 6px; display: block; pointer-events: none;
+}
+.piz__img-ph {
+  background: var(--surface-hover);
+  display: flex; align-items: center; justify-content: center; font-size: 2.6rem;
+}
+
+.piz__nombre {
+  font-size: 0.68rem; font-weight: 700; color: var(--text);
+  text-align: center; margin: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;
+  background: rgba(255,255,255,0.9);
+  border-radius: 4px; padding: 1px 5px; pointer-events: none;
+}
+
+/* Handle rotación */
+.piz__rot {
+  position: absolute;
+  top: -36px; left: 50%; transform: translateX(-50%);
+  width: 16px; height: 16px; border-radius: 50%;
+  background: #fff; border: 2.5px solid var(--brand);
+  box-shadow: 0 2px 6px rgba(124,58,237,.35);
+  cursor: grab; z-index: 10; touch-action: none;
+}
+.piz__rot::after {
+  content: '';
+  position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+  width: 2px; height: 18px; background: var(--brand); opacity: 0.35;
+}
+
+/* Handle resize */
+.piz__resize {
+  position: absolute; bottom: -8px; right: -8px;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--brand); border: 2.5px solid #fff;
+  box-shadow: 0 2px 8px rgba(124,58,237,.45);
+  cursor: se-resize; z-index: 10; touch-action: none;
+}
+
+/* ── Barra mobile (< 640px) ─────────────────────────────────────── */
+.piz__mbar { display: none; }
+
+@media (max-width: 639px) {
+  .piz__mbar {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 7px 10px;
+    background: var(--surface);
+    border-top: 1.5px solid var(--border);
+    flex-shrink: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .piz__mbar::-webkit-scrollbar { display: none; }
+}
+
+.piz__madd {
+  background: var(--brand);
+  color: #fff; border: none; border-radius: var(--radius-pill);
+  padding: 6px 12px;
+  font-family: 'Nunito', sans-serif; font-size: 0.8rem; font-weight: 700;
+  cursor: pointer; white-space: nowrap; flex-shrink: 0; transition: background 0.15s;
+}
+.piz__madd:hover { background: var(--brand-dark); }
+.piz__madd--sec {
+  background: var(--surface-hover);
+  color: var(--brand-dark);
+  border: 1.5px solid var(--border-mid);
+}
+.piz__madd--sec:hover { background: #dfc8ff; }
+
+.piz__mshapes { display: flex; gap: 4px; flex-shrink: 0; }
+
+.piz__mbtn {
+  width: 32px; height: 32px;
+  border: 1.5px solid var(--border-mid); border-radius: 9px;
+  background: var(--surface-soft); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: all 0.15s;
+}
+.piz__mbtn:hover:not(:disabled) { border-color: var(--brand); background: var(--surface-hover); }
+.piz__mbtn--act { background: var(--brand); border-color: var(--brand); }
+.piz__mbtn--act .piz__ico { background: #fff; }
+.piz__mbtn--act .piz__ico--libre { border-color: #fff; background: transparent; }
+.piz__mbtn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+.piz__micon {
+  width: 32px; height: 32px;
+  border: 1.5px solid var(--border-mid); border-radius: 9px;
+  background: var(--surface-soft); color: var(--text-soft);
+  font-size: 0.9rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: all 0.15s; font-family: 'Nunito', sans-serif;
+}
+.piz__micon:hover:not(:disabled) { background: var(--surface-hover); border-color: var(--brand); color: var(--brand-dark); }
+.piz__micon--del { color: #dc2626; border-color: #fecaca; background: #fef2f2; }
+.piz__micon:disabled { opacity: 0.38; cursor: not-allowed; }
+
+/* ── Íconos forma (CSS) ─────────────────────────────────────────── */
+.piz__ico {
+  display: block; width: 14px; height: 14px;
+  background: var(--brand); flex-shrink: 0; transition: background 0.15s;
+}
+.piz__ico--libre { background: transparent; border: 2px dashed var(--brand); border-radius: 2px; }
+.piz__ico--cuadrado   { border-radius: 2px; }
+.piz__ico--redondeado { border-radius: 7px; }
+.piz__ico--circulo    { border-radius: 50%; }
+.piz__ico--diamante   { border-radius: 1px; transform: rotate(45deg) scale(0.72); }
+
+/* ── Sheet overlay ──────────────────────────────────────────────── */
+.piz__overlay {
+  position: fixed; inset: 0;
+  background: rgba(45,21,96,.42); z-index: 400;
+  display: flex; align-items: flex-end;
+}
+
+.piz__sheet {
+  width: 100%; max-height: 60vh; background: #fff;
+  border-radius: 22px 22px 0 0;
+  display: flex; flex-direction: column; overflow: hidden;
+  animation: piz-up .24s ease;
+}
+
+@keyframes piz-up {
+  from { transform: translateY(50%); opacity: .7; }
+  to   { transform: translateY(0);   opacity: 1; }
+}
+
+.piz__sheet-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 18px 12px;
+  border-bottom: 1.5px solid var(--border); flex-shrink: 0;
+}
+.piz__sheet-head span { font-weight: 800; font-size: 1rem; color: var(--text); }
+.piz__sheet-head button {
+  background: none; border: none; font-size: 1.1rem; color: var(--text-soft);
+  cursor: pointer; padding: 4px 8px; border-radius: var(--radius-sm); transition: background .12s;
+}
+.piz__sheet-head button:hover { background: var(--surface-hover); }
+
+/* Grid prendas */
+.piz__sheet-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+  gap: 10px; padding: 14px 18px 20px; overflow-y: auto;
+}
+.piz__sheet-vacio { grid-column: 1/-1; text-align: center; color: var(--text-muted); font-size: .9rem; padding: 20px 0; }
+
+.piz__sheet-item {
+  background: var(--surface-soft); border: 1.5px solid var(--border);
+  border-radius: var(--radius-md); padding: 8px 6px 10px;
+  cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 6px;
+  transition: all .15s; font-family: 'Nunito', sans-serif;
+}
+.piz__sheet-item:hover { border-color: var(--brand); background: var(--surface-hover); transform: translateY(-2px); }
+
+.piz__sheet-item img, .piz__sheet-ph {
+  width: 56px; height: 56px; border-radius: 8px; object-fit: cover; display: block;
+}
+.piz__sheet-ph { background: var(--surface-hover); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; }
+.piz__sheet-item span { font-size: .7rem; font-weight: 700; color: var(--text); text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+
+/* Grid fondos en sheet (mobile) */
+.piz__sheet-fondos {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px; padding: 16px 18px 24px; overflow-y: auto;
+}
+
+.piz__sheet-fondo {
+  aspect-ratio: 4/3;
+  border-radius: 12px;
+  border: 2px solid var(--border);
+  cursor: pointer; transition: all .15s;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Nunito', sans-serif;
+}
+.piz__sheet-fondo:hover { border-color: var(--brand); }
+.piz__sheet-fondo--act { border-color: var(--brand); box-shadow: 0 0 0 2px var(--brand); }
+
+.piz__sheet-fondo span {
+  font-size: .72rem; font-weight: 700; color: var(--text);
+  background: rgba(255,255,255,.8); border-radius: 4px; padding: 2px 6px;
+}
+.piz__fondo-label--light {
+  background: rgba(0,0,0,.5) !important;
+  color: #fff !important;
+}

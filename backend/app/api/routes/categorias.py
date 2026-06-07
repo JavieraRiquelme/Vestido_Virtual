@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from app.schemas.categoria_prenda import CategoriaPrendaCreate
+from app.schemas.categoria_prenda import CategoriaPrendaCreate, CategoriaPrendaRead
 from app.core.database import get_db
-from app.models.models import CategoriaPrenda, CategoriaPrendaRead
+from app.models.models import CategoriaPrenda
 
 router = APIRouter()
 

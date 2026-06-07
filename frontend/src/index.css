@@ -1,3 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+
+/* ── Design tokens ───────────────────────────────────────────────── */
+:root {
+  /* Colores */
+  --bg:            #f3eaff;
+  --surface:       #ffffff;
+  --surface-soft:  #faf5ff;
+  --surface-hover: #ede0ff;
+
+  --brand:         #9b5de5;
+  --brand-dark:    #7c3aed;
+
+  --text:          #2d1560;
+  --text-soft:     #6b5b8a;
+  --text-muted:    #a98ad4;
+
+  --border:        #e4d4f9;
+  --border-mid:    #d8b4fe;
+
+  --error-bg:      #fef2f2;
+  --error-text:    #dc2626;
+
+  /* Radios */
+  --radius-sm:   10px;
+  --radius-md:   14px;
+  --radius-lg:   20px;
+  --radius-pill: 50px;
+
+  /* Sombras */
+  --shadow-card: 0 2px 16px rgba(107, 33, 168, 0.08);
+  --shadow-btn:  0 4px 16px rgba(124, 58, 237, 0.35);
+
+  /* Espaciado de página */
+  --page-px:  16px;
+  --page-pt:  24px;
+  --page-pb:  100px;    /* espacio para navbar flotante */
+
+  /* Cards */
+  --card-px:  16px;
+  --card-py:  18px;
+
+  /* Grillas */
+  --gap:      12px;
+}
+
+/* Breakpoint md (≥ 640px) */
+@media (min-width: 640px) {
+  :root {
+    --page-px: 24px;
+    --card-px: 20px;
+    --card-py: 20px;
+    --gap:     14px;
+  }
+}
+
+/* Breakpoint lg (≥ 1024px) */
+@media (min-width: 1024px) {
+  :root {
+    --page-px:  40px;
+    --page-pt:  36px;
+    --page-pb:  80px;
+    --gap:      16px;
+  }
+}
+
+/* ── Reset ───────────────────────────────────────────────────────── */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -5,5 +72,16 @@
 }
 
 body {
-  background: #f3eaff;
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* ── Layout shell ────────────────────────────────────────────────── */
+.app-shell {
+  min-height: 100vh;
+}
+
+.app-main {
+  min-height: 100vh;
 }

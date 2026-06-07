@@ -1,18 +1,19 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from app.schemas.outfit import OutfitCreate
+from app.schemas.outfit import OutfitCreate, OutfitRead
+from app.schemas.prenda import PrendaRead
 from app.core.database import get_db
-from app.models.models import Outfit, OutfitPrenda
+from app.models.models import Outfit, OutfitPrenda, Prenda
 
 router = APIRouter()
 
 
-@router.get("/")
+@router.get("/", response_model=list[OutfitRead])
 def listar(db: Session = Depends(get_db)):
     return db.query(Outfit).all()
 
 
-@router.get("/{outfit_id}")
+@router.get("/{outfit_id}", response_model=OutfitRead)
 def obtener(outfit_id: int, db: Session = Depends(get_db)):
     outfit = db.query(Outfit).filter(Outfit.id == outfit_id).first()
     if not outfit:
@@ -20,12 +21,12 @@ def obtener(outfit_id: int, db: Session = Depends(get_db)):
     return outfit
 
 
-@router.get("/usuario/{usuario_id}")
+@router.get("/usuario/{usuario_id}", response_model=list[OutfitRead])
 def listar_por_usuario(usuario_id: int, db: Session = Depends(get_db)):
     return db.query(Outfit).filter(Outfit.usuario_id == usuario_id).all()
 
 
-@router.post("/")
+@router.post("/", response_model=OutfitRead)
 def crear(datos: OutfitCreate, db: Session = Depends(get_db)):
     outfit = Outfit(**datos.model_dump())
     db.add(outfit)
@@ -34,7 +35,7 @@ def crear(datos: OutfitCreate, db: Session = Depends(get_db)):
     return outfit
 
 
-@router.put("/{outfit_id}")
+@router.put("/{outfit_id}", response_model=OutfitRead)
 def actualizar(outfit_id: int, datos: OutfitCreate, db: Session = Depends(get_db)):
     outfit = db.query(Outfit).filter(Outfit.id == outfit_id).first()
     if not outfit:
@@ -54,6 +55,17 @@ def eliminar(outfit_id: int, db: Session = Depends(get_db)):
     db.delete(outfit)
     db.commit()
     return {"mensaje": "Outfit eliminado"}
+
+
+@router.get("/{outfit_id}/prendas", response_model=list[PrendaRead])
+def listar_prendas_de_outfit(outfit_id: int, db: Session = Depends(get_db)):
+    prendas = (
+        db.query(Prenda)
+        .join(OutfitPrenda, OutfitPrenda.prenda_id == Prenda.id)
+        .filter(OutfitPrenda.outfit_id == outfit_id)
+        .all()
+    )
+    return prendas
 
 
 @router.post("/{outfit_id}/prendas/{prenda_id}")

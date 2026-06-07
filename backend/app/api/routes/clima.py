@@ -1,10 +1,53 @@
-from fastapi import APIRouter, Depends, HTTPException
+import requests
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.models.models import Clima
-from app.services.clima import obtener_clima_gps
+from app.services.clima import obtener_clima, obtener_clima_gps
+from app.core.config import settings
 
 router = APIRouter()
+
+
+@router.get("/autocomplete")
+def autocomplete_ciudad(q: str = Query(..., min_length=2)):
+    try:
+        res = requests.get(
+            "http://api.openweathermap.org/geo/1.0/direct",
+            params={"q": q, "limit": 5, "appid": settings.OPENWEATHER_API_KEY},
+            timeout=4,
+        )
+        sugerencias = [
+            {
+                "nombre": item["name"],
+                "pais":   item.get("country", ""),
+                "estado": item.get("state", ""),
+                "lat":    item["lat"],
+                "lon":    item["lon"],
+            }
+            for item in res.json()
+        ]
+        return sugerencias
+    except Exception as e:
+        raise HTTPException(status_code=503, detail=str(e))
+
+
+@router.get("/ciudad")
+def consultar_por_ciudad(q: str = Query(..., description="Nombre de la ciudad")):
+    try:
+        datos = obtener_clima(q)
+    except Exception as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    return datos
+
+
+@router.get("/gps")
+def consultar_por_gps(lat: float, lon: float):
+    try:
+        datos = obtener_clima_gps(lat, lon)
+    except Exception as e:
+        raise HTTPException(status_code=503, detail=str(e))
+    return datos
 
 
 @router.get("/consultar")

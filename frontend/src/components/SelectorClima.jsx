@@ -26,7 +26,7 @@ export default function SelectorClima({ seleccionadas = [], onChange }) {
 
   return (
     <div className="selector-clima">
-      <p className="selector-clima__label">— CONDICIONES DEL CLIMA</p>
+      <p className="selector-clima__label">Condiciones del clima</p>
       <div className="selector-clima__grid">
         {CONDICIONES.map((c) => (
           <button

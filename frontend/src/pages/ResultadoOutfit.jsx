@@ -124,6 +124,14 @@ export default function ResultadoOutfit() {
         )}
 
         <button
+          className="resultado__btn resultado__btn--pizarron"
+          onClick={() => navigate("/pizarron", { state: { prendas } })}
+          disabled={prendas.length === 0}
+        >
+          Editar en pizarrón
+        </button>
+
+        <button
           className="resultado__btn resultado__btn--otro"
           onClick={handleCrearOtro}
         >

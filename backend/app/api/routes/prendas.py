@@ -1,16 +1,48 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
 from sqlalchemy.orm import Session
-from app.schemas.prenda import PrendaCreate
 from app.core.database import get_db
 from app.models.models import Prenda
 from app.schemas.prenda import PrendaCreate, PrendaRead
+from app.services.storage import subir_imagen
 
 router = APIRouter()
+
+
+@router.post("/subir", response_model=PrendaRead)
+async def subir_prenda(
+    usuario_id: int = Form(...),
+    categoria_id: int = Form(...),
+    nombre: str = Form(...),
+    color: str = Form(None),
+    ideal_clima: str = Form(None),
+    imagen: UploadFile = File(...),
+    db: Session = Depends(get_db),
+):
+    imagen_bytes = await imagen.read()
+    imagen_url = subir_imagen(imagen_bytes, imagen.filename, usuario_id)
+
+    prenda = Prenda(
+        usuario_id=usuario_id,
+        categoria_id=categoria_id,
+        nombre=nombre,
+        color=color,
+        ideal_clima=ideal_clima,
+        imagen_url=imagen_url,
+    )
+    db.add(prenda)
+    db.commit()
+    db.refresh(prenda)
+    return prenda
 
 
 @router.get("/", response_model=list[PrendaRead])
 def listar(db: Session = Depends(get_db)):
     return db.query(Prenda).all()
+
+
+@router.get("/usuario/{usuario_id}", response_model=list[PrendaRead])
+def listar_por_usuario(usuario_id: int, db: Session = Depends(get_db)):
+    return db.query(Prenda).filter(Prenda.usuario_id == usuario_id).all()
 
 
 @router.get("/{prenda_id}", response_model=PrendaRead)
@@ -19,11 +51,6 @@ def obtener(prenda_id: int, db: Session = Depends(get_db)):
     if not prenda:
         raise HTTPException(status_code=404, detail="Prenda no encontrada")
     return prenda
-
-
-@router.get("/usuario/{usuario_id}", response_model=list[PrendaRead])
-def listar_por_usuario(usuario_id: int, db: Session = Depends(get_db)):
-    return db.query(Prenda).filter(Prenda.usuario_id == usuario_id).all()
 
 
 @router.post("/", response_model=PrendaRead)

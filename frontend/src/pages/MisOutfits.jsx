@@ -1,135 +1,165 @@
-// MisOutfits.jsx — Galería de outfits guardados
-// Isidora — Sprint 3
-//
-// Muestra todos los outfits guardados del usuario con opción de eliminar.
+import { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
+import { getOutfitsUsuario, eliminarOutfit } from "../services/outfits"
+import { esDemoMode } from "../utils/auth"
+import { MOCK_OUTFITS, MOCK_OUTFIT_PRENDAS } from "../utils/mockData"
+import "./MisOutfits.css"
 
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { getOutfitsUsuario, eliminarOutfit } from "../services/outfits";
-import "./MisOutfits.css";
+const API = import.meta.env.VITE_API_URL || "http://localhost:8000"
+const USUARIO_ID_TEMP = 1
 
-// Usuario hardcodeado hasta que Javiera integre la auth (Sprint 3)
-const USUARIO_ID_TEMP = 1;
-
-const OCASION_LABEL = { 1: "Universidad", 2: "Trabajo", 3: "Casual" };
-const CLIMA_EMOJI   = { frio: "🥶", templado: "🌤️", calor: "☀️" };
+const OCASION_CFG = {
+  1: { label: "Universidad", bg: "linear-gradient(145deg,#60a5fa,#3b82f6,#1d4ed8)" },
+  2: { label: "Trabajo",     bg: "linear-gradient(145deg,#818cf8,#4f46e5,#312e81)" },
+  3: { label: "Casual",      bg: "linear-gradient(145deg,#fbbf24,#f59e0b,#b45309)" },
+  4: { label: "Fiesta",      bg: "linear-gradient(145deg,#f472b6,#ec4899,#be185d)" },
+  5: { label: "Deporte",     bg: "linear-gradient(145deg,#34d399,#10b981,#065f46)" },
+  6: { label: "Cita",        bg: "linear-gradient(145deg,#fb7185,#f43f5e,#be123c)" },
+}
+const DEFAULT_BG = "linear-gradient(145deg,#c4b5fd,#9b5de5,#7c3aed)"
+const CLIMA_LABEL = { frio: "Frío", templado: "Templado", calor: "Calor" }
 
 export default function MisOutfits() {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
-  const [outfits,   setOutfits]   = useState([]);
-  const [cargando,  setCargando]  = useState(true);
-  const [error,     setError]     = useState(null);
-  const [eliminando, setEliminando] = useState(null);
+  const [outfits,    setOutfits]    = useState([])
+  const [cargando,   setCargando]   = useState(true)
+  const [error,      setError]      = useState(null)
+  const [eliminando, setEliminando] = useState(null)
+  const [covers,     setCovers]     = useState({})  // { outfitId: imagen_url }
 
-  useEffect(() => {
-    cargarOutfits();
-  }, []);
+  useEffect(() => { cargarOutfits() }, [])
 
   const cargarOutfits = async () => {
-    setCargando(true);
-    setError(null);
-    try {
-      const data = await getOutfitsUsuario(USUARIO_ID_TEMP);
-      setOutfits(data);
-    } catch (e) {
-      setError("No se pudieron cargar los outfits.");
-    } finally {
-      setCargando(false);
+    setCargando(true); setError(null)
+    if (esDemoMode()) {
+      setOutfits(MOCK_OUTFITS)
+      // Portadas desde mock
+      const c = {}
+      Object.entries(MOCK_OUTFIT_PRENDAS).forEach(([id, prendas]) => {
+        const primera = prendas.find(p => p.imagen_url)
+        if (primera) c[parseInt(id)] = primera.imagen_url
+      })
+      setCovers(c)
+      setCargando(false)
+      return
     }
-  };
+    try {
+      const data = await getOutfitsUsuario(USUARIO_ID_TEMP)
+      setOutfits(data)
+      cargarPortadas(data)
+    } catch {
+      setError("No se pudieron cargar los outfits.")
+    } finally {
+      setCargando(false)
+    }
+  }
+
+  // Carga progresiva: busca la primera prenda con imagen de cada outfit
+  const cargarPortadas = (lista) => {
+    lista.forEach(async outfit => {
+      try {
+        const res = await fetch(`${API}/outfits/${outfit.id}/prendas`)
+        const prendas = await res.json()
+        const primera = Array.isArray(prendas) && prendas.find(p => p.imagen_url)
+        if (primera) setCovers(prev => ({ ...prev, [outfit.id]: primera.imagen_url }))
+      } catch {}
+    })
+  }
 
   const handleEliminar = async (outfitId) => {
-    setEliminando(outfitId);
+    if (esDemoMode()) { setOutfits(prev => prev.filter(o => o.id !== outfitId)); return }
+    setEliminando(outfitId)
     try {
-      await eliminarOutfit(outfitId);
-      setOutfits((prev) => prev.filter((o) => o.id !== outfitId));
-    } catch (e) {
-      setError("No se pudo eliminar el outfit.");
+      await eliminarOutfit(outfitId)
+      setOutfits(prev => prev.filter(o => o.id !== outfitId))
+    } catch {
+      setError("No se pudo eliminar el outfit.")
     } finally {
-      setEliminando(null);
+      setEliminando(null)
     }
-  };
+  }
 
   return (
-    <div className="mis-outfits">
-      <div className="mis-outfits__header">
-        <h1 className="mis-outfits__titulo">Mis Outfits</h1>
-        <button
-          className="mis-outfits__btn-nuevo"
-          onClick={() => navigate("/recomendaciones")}
-        >
+    <div className="outfits">
+      {/* Header */}
+      <div className="outfits__header">
+        <h1 className="outfits__titulo">Mis Outfits</h1>
+        <button className="outfits__btn-nuevo" onClick={() => navigate("/recomendaciones")}>
           + Nuevo
         </button>
       </div>
 
+      {error && <p className="outfits__error">{error}</p>}
+
+      {/* Cargando */}
       {cargando && (
-        <div className="mis-outfits__cargando">
-          <span className="mis-outfits__spinner">🐙</span>
-          <p>Closy está buscando tus outfits...</p>
+        <div className="outfits__cargando">
+          <span className="outfits__spinner">🐙</span>
+          <p>Closy está buscando tus outfits…</p>
         </div>
       )}
 
-      {error && <p className="mis-outfits__error">{error}</p>}
-
+      {/* Vacío */}
       {!cargando && outfits.length === 0 && (
-        <div className="mis-outfits__vacio">
-          <span className="mis-outfits__vacio-emoji">👗</span>
+        <div className="outfits__vacio">
+          <span>👗</span>
           <p>Aún no tienes outfits guardados.</p>
           <p>¡Pídele a Closy que te arme uno!</p>
-          <button
-            className="mis-outfits__btn-crear"
-            onClick={() => navigate("/recomendaciones")}
-          >
-            Crear mi primer outfit
-          </button>
+          <button onClick={() => navigate("/recomendaciones")}>Crear mi primer outfit</button>
         </div>
       )}
 
-      <div className="mis-outfits__grid">
-        {outfits.map((outfit) => (
-          <div key={outfit.id} className="mis-outfits__card">
-            {/* Ícono de clima */}
-            <div className="mis-outfits__card-clima">
-              {CLIMA_EMOJI[outfit.ideal_clima] || "🌡️"}
-            </div>
+      {/* Galería */}
+      <div className="outfits__galeria">
+        {outfits.map(outfit => {
+          const cfg    = OCASION_CFG[outfit.ocasion_id]
+          const portada = covers[outfit.id]
 
-            <div className="mis-outfits__card-info">
-              <h3 className="mis-outfits__card-nombre">{outfit.nombre}</h3>
-              <div className="mis-outfits__card-tags">
-                {outfit.ocasion_id && (
-                  <span className="mis-outfits__tag mis-outfits__tag--ocasion">
-                    {OCASION_LABEL[outfit.ocasion_id] || "Ocasión"}
-                  </span>
-                )}
-                {outfit.ideal_clima && (
-                  <span className="mis-outfits__tag mis-outfits__tag--clima">
-                    {outfit.ideal_clima}
-                  </span>
-                )}
-              </div>
-              {outfit.created_at && (
-                <p className="mis-outfits__card-fecha">
-                  {new Date(outfit.created_at).toLocaleDateString("es-CL", {
-                    day: "numeric",
-                    month: "short",
-                    year: "numeric",
-                  })}
-                </p>
-              )}
-            </div>
-
-            <button
-              className="mis-outfits__btn-eliminar"
-              onClick={() => handleEliminar(outfit.id)}
-              disabled={eliminando === outfit.id}
-              aria-label="Eliminar outfit"
+          return (
+            <div
+              key={outfit.id}
+              className="outfits__card"
+              onClick={() => navigate(`/outfit/${outfit.id}`)}
             >
-              {eliminando === outfit.id ? "..." : "🗑️"}
-            </button>
-          </div>
-        ))}
+              {/* Imagen real o gradiente */}
+              {portada ? (
+                <img src={portada} alt={outfit.nombre} className="outfits__card-img" />
+              ) : (
+                <div
+                  className="outfits__card-grad"
+                  style={{ background: cfg?.bg ?? DEFAULT_BG }}
+                >
+                  <div className="outfits__card-dots" />
+                </div>
+              )}
+
+              {/* Botón eliminar */}
+              <button
+                className="outfits__card-del"
+                onClick={e => { e.stopPropagation(); handleEliminar(outfit.id) }}
+                disabled={eliminando === outfit.id}
+                aria-label="Eliminar"
+              >
+                {eliminando === outfit.id ? "·" : "×"}
+              </button>
+
+              {/* Info overlay */}
+              <div className="outfits__card-info">
+                <p className="outfits__card-nombre">{outfit.nombre}</p>
+                <div className="outfits__card-chips">
+                  {cfg && <span className="outfits__chip">{cfg.label}</span>}
+                  {outfit.ideal_clima && (
+                    <span className="outfits__chip outfits__chip--clima">
+                      {CLIMA_LABEL[outfit.ideal_clima] || outfit.ideal_clima}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+          )
+        })}
       </div>
     </div>
-  );
+  )
 }

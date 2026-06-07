@@ -54,6 +54,9 @@ def sugerir_outfit_ia(
     temperatura: float,
     descripcion_clima: str,
     ocasion: str,
+    contexto_ciudades: str | None = None,
+    prenda_fija: dict | None = None,
+    estilo: str | None = None,
 ) -> dict:
     """
     Recibe las prendas del closet del usuario, el clima actual
@@ -71,13 +74,34 @@ def sugerir_outfit_ia(
         for p in prendas
     )
 
+    if contexto_ciudades:
+        clima_texto = (
+            f"El usuario viajará entre ciudades con estos climas:\n"
+            f"{contexto_ciudades}\n"
+            f"Temperatura mínima del recorrido: {temperatura}°C.\n"
+            f"Considera si necesita capas para adaptarse a distintas temperaturas."
+        )
+    else:
+        clima_texto = f"Clima actual: {temperatura}°C, {descripcion_clima}."
+
+    extra = ""
+    if prenda_fija:
+        extra += (
+            f"\nEl usuario quiere usar sí o sí esta prenda: "
+            f"id:{prenda_fija['id']} | {prenda_fija['nombre']} | color:{prenda_fija.get('color','?')}. "
+            f"Inclúyela obligatoriamente en el outfit y arma el resto en torno a ella.\n"
+        )
+    if estilo:
+        extra += f"\nEstilo preferido: {estilo}. Adapta el outfit a este estilo.\n"
+
     prompt = (
         f"Eres un asistente de moda para la app Closy.\n"
         f"El usuario tiene estas prendas en su closet:\n{lista_prendas}\n\n"
-        f"Clima actual: {temperatura}°C, {descripcion_clima}.\n"
-        f"Ocasión: {ocasion}.\n\n"
+        f"{clima_texto}\n"
+        f"Ocasión: {ocasion}.{extra}\n"
         f"Elige las prendas más adecuadas para armar un outfit completo "
-        f"(top, bottom, zapatos y opcionalmente accesorio).\n"
+        f"(top, bottom, zapatos y opcionalmente accesorio). "
+        f"Si hay diferencia de temperatura entre origen y destino, prioriza prendas en capas.\n"
         f"Responde SOLO con este formato, sin texto extra:\n"
         f"ids: 1,3,5\n"
         f"mensaje: (explica brevemente por qué elegiste ese outfit, en tono amigable)"

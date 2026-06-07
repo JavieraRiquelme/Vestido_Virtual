@@ -32,7 +32,7 @@ def register(datos: RegisterRequest, db: Session = Depends(get_db)):
     )
     db.add(usuario)
     db.commit()
-    db.refresh()
+    db.refresh(usuario)
     token = crear_token({"sub": str(usuario.id)})
     return {"access_token": token, "token_type": "bearer", "usuario_id": usuario.id}
 
