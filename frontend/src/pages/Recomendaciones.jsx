@@ -4,7 +4,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { pedirSugerencia } from "../services/outfits";
-import { esDemoMode } from "../utils/auth";
+import { esDemoMode, getUsuarioId } from "../utils/auth";
 import { MOCK_SUGERENCIA, MOCK_PRENDAS } from "../utils/mockData";
 import "./Recomendaciones.css";
 
@@ -70,8 +70,6 @@ const OCASIONES = [
     },
   },
 ];
-
-const USUARIO_ID_TEMP = 1;
 
 const MOCK_CLIMA = {
   santiago: { ciudad: "Santiago", temperatura: 18, descripcion: "cielo despejado", categoria: "templado" },
@@ -251,7 +249,7 @@ export default function Recomendaciones() {
 
   useEffect(() => {
     if (esDemoMode()) { setPrendas(MOCK_PRENDAS); return; }
-    fetch(`${API}/prendas/usuario/${USUARIO_ID_TEMP}`)
+    fetch(`${API}/prendas/usuario/${getUsuarioId()}`)
       .then((r) => r.ok ? r.json() : [])
       .then(setPrendas)
       .catch(() => {});
@@ -281,7 +279,7 @@ export default function Recomendaciones() {
 
     try {
       const resultado = await pedirSugerencia({
-        usuario_id:     USUARIO_ID_TEMP,
+        usuario_id:     getUsuarioId(),
         ocasion,
         ciudad_origen:  origen.clima?.ciudad  || null,
         ciudad_destino: destino.clima?.ciudad || null,
