@@ -12,7 +12,7 @@ class Usuario(Base):
     username         = Column(String, unique=True, nullable=False)
     email            = Column(String, unique=True, nullable=False)
     nombre           = Column(String, nullable=False)
-    contraseña_hash  = Column(String, nullable=False)
+    password_hash    = Column('contraseña_hash', String, nullable=False)
     age              = Column(Integer, nullable=True)
     created_at       = Column(DateTime, default=datetime.utcnow)
 

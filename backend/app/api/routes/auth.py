@@ -28,7 +28,7 @@ def register(datos: RegisterRequest, db: Session = Depends(get_db)):
         username = datos.username,
         email = datos.email,
         nombre = datos.nombre,
-        contraseña_hash = hashear_password(datos.password),
+        password_hash = hashear_password(datos.password),
     )
     db.add(usuario)
     db.commit()
@@ -40,7 +40,7 @@ def register(datos: RegisterRequest, db: Session = Depends(get_db)):
 def login(datos: LoginRequest, db: Session = Depends(get_db)):
     usuario = db.query(Usuario).filter(Usuario.username == datos.username).first()
 
-    if not usuario or not verificar_password(datos.password, usuario.contraseña_hash):
+    if not usuario or not verificar_password(datos.password, usuario.password_hash):
         raise HTTPException(status_code=401, detail="Credenciales incorrectas")
     
     token = crear_token({"sub": str(usuario.id)})
