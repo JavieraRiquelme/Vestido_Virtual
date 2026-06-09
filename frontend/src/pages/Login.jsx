@@ -41,7 +41,7 @@ export default function Login() {
   return (
     <div className="auth">
       <div className="auth__card">
-        <span className="auth__mascota" role="img" aria-label="Closy">🐙</span>
+        <img src="/logo.png" alt="Closy" className="auth__logo" />
         <h1 className="auth__titulo">¡Bienvenida a Closy!</h1>
         <p className="auth__subtitulo">Inicia sesión para ver tu closet virtual</p>
 

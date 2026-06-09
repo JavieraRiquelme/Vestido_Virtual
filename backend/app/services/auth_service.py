@@ -3,21 +3,17 @@ auth_service.py — Servicio de autenticación
 Maneja el cifrado de contraseñas y la creación de tokens JWT.
 """
 from datetime import datetime, timedelta
-from passlib.context import CryptContext
+import bcrypt
 from jose import jwt
 from app.core.config import settings
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
 
 def hashear_password(password: str) -> str:
-    """Recibe la contraseña en texto plano y devuelve su versión cifrada."""
-    return pwd_context.hash(password)
+    return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
 
 
 def verificar_password(password_plano: str, password_hasheado: str) -> bool:
-    """Compara la contraseña ingresada con el hash guardado en la base de datos."""
-    return pwd_context.verify(password_plano, password_hasheado)
+    return bcrypt.checkpw(password_plano.encode(), password_hasheado.encode())
 
 
 def crear_token(datos: dict) -> str:

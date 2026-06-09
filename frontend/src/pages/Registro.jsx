@@ -46,7 +46,7 @@ export default function Registro() {
   return (
     <div className="auth">
       <div className="auth__card">
-        <span className="auth__mascota" role="img" aria-label="Closy">🐙</span>
+        <img src="/logo.png" alt="Closy" className="auth__logo" />
         <h1 className="auth__titulo">Crea tu cuenta</h1>
         <p className="auth__subtitulo">Empieza a organizar tu closet virtual</p>
 
