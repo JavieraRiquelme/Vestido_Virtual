@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { getOutfitsUsuario, eliminarOutfit } from "../services/outfits"
-import { esDemoMode } from "../utils/auth"
+import { esDemoMode, getUsuarioId } from "../utils/auth"
 import { MOCK_OUTFITS, MOCK_OUTFIT_PRENDAS } from "../utils/mockData"
 import "./MisOutfits.css"
 
 const API = import.meta.env.VITE_API_URL || "http://localhost:8000"
-const USUARIO_ID_TEMP = 1
 
 const OCASION_CFG = {
   1: { label: "Universidad", bg: "linear-gradient(145deg,#60a5fa,#3b82f6,#1d4ed8)" },
@@ -45,7 +44,7 @@ export default function MisOutfits() {
       return
     }
     try {
-      const data = await getOutfitsUsuario(USUARIO_ID_TEMP)
+      const data = await getOutfitsUsuario(getUsuarioId())
       setOutfits(data)
       cargarPortadas(data)
     } catch {
@@ -95,15 +94,15 @@ export default function MisOutfits() {
       {/* Cargando */}
       {cargando && (
         <div className="outfits__cargando">
-          <span className="outfits__spinner">🐙</span>
-          <p>Closy está buscando tus outfits…</p>
+          <div className="outfits__spinner" />
+          <p>Cargando tus outfits…</p>
         </div>
       )}
 
       {/* Vacío */}
       {!cargando && outfits.length === 0 && (
         <div className="outfits__vacio">
-          <span>👗</span>
+          <img src="/logo.png" alt="Closy" className="outfits__vacio-logo" />
           <p>Aún no tienes outfits guardados.</p>
           <p>¡Pídele a Closy que te arme uno!</p>
           <button onClick={() => navigate("/recomendaciones")}>Crear mi primer outfit</button>

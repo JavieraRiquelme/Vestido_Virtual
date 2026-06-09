@@ -30,7 +30,13 @@
   font-size: 1rem;
 }
 
-.closet__vacio-emoji { font-size: 4rem; }
+.closet__vacio-logo {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+  opacity: 0.75;
+  margin-bottom: 4px;
+}
 
 /* Filtros */
 .closet__filtros {

@@ -1,11 +1,10 @@
 import { useState, useEffect, useRef, useCallback } from "react"
 import { useNavigate, useLocation } from "react-router-dom"
-import { esDemoMode } from "../utils/auth"
+import { esDemoMode, getUsuarioId } from "../utils/auth"
 import { MOCK_PRENDAS } from "../utils/mockData"
 import "./PizarronOutfit.css"
 
 const API = import.meta.env.VITE_API_URL || "http://localhost:8000"
-const USUARIO_ID_TEMP = 1
 
 const SHAPES = [
   { id: "libre",      label: "Sin recorte",   clip: null },
@@ -106,7 +105,7 @@ export default function PizarronOutfit() {
   // ── Closet ──────────────────────────────────────────────────────
   useEffect(() => {
     if (esDemoMode()) { setClosetItems(MOCK_PRENDAS); return }
-    fetch(`${API}/prendas/usuario/${USUARIO_ID_TEMP}`)
+    fetch(`${API}/prendas/usuario/${getUsuarioId()}`)
       .then(r => r.json()).then(setClosetItems).catch(() => {})
   }, [])
 
@@ -261,7 +260,7 @@ export default function PizarronOutfit() {
   ]
 
   return (
-    <div className="piz">
+    <div className={`piz${sheetMode ? " piz--sheet" : ""}`}>
 
       {/* ── Header ── */}
       <div className="piz__header">

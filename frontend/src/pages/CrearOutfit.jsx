@@ -6,7 +6,7 @@ export default function CrearOutfit() {
 
   return (
     <div className="crear-outfit">
-      <span className="crear-outfit__mascota" role="img" aria-label="Closy">🐙</span>
+      <img src="/logo.png" alt="Closy" className="crear-outfit__mascota" />
       <h1 className="crear-outfit__titulo">Crea tu outfit</h1>
       <div className="crear-outfit__card">
         <p>¡Esta función está en construcción!</p>

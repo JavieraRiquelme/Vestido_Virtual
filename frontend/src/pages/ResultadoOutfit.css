@@ -20,7 +20,9 @@
 }
 
 .resultado__closy {
-  font-size: 3rem;
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
   flex-shrink: 0;
   animation: closy-float 3s ease-in-out infinite;
 }

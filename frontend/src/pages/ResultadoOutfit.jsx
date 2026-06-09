@@ -7,6 +7,7 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { guardarOutfit } from "../services/outfits";
+import { getUsuarioId } from "../utils/auth";
 import "./ResultadoOutfit.css";
 
 const OCASION_ID_MAP = { universidad: 1, trabajo: 2, casual: 3 };
@@ -20,8 +21,6 @@ const CATEGORIA_NOMBRE = {
   6: "Accesorio",
 };
 
-// Usuario hardcodeado hasta que Javiera integre la auth (Sprint 3)
-const USUARIO_ID_TEMP = 1;
 
 export default function ResultadoOutfit() {
   const navigate  = useNavigate();
@@ -49,7 +48,7 @@ export default function ResultadoOutfit() {
       const nombre     = `Outfit ${ocasion} – ${temperatura}°C`;
       const ocasionId  = OCASION_ID_MAP[ocasion] ?? 1;
       const prendaIds  = prendas.map((p) => p.id);
-      await guardarOutfit(USUARIO_ID_TEMP, nombre, ocasionId, nivelClima, prendaIds);
+      await guardarOutfit(getUsuarioId(), nombre, ocasionId, nivelClima, prendaIds);
       setGuardado(true);
     } catch (e) {
       setError(e.message || "No se pudo guardar el outfit.");
@@ -66,7 +65,7 @@ export default function ResultadoOutfit() {
     <div className="resultado">
       {/* Closy + mensaje */}
       <div className="resultado__header">
-        <span className="resultado__closy" role="img" aria-label="Closy">🐙</span>
+        <img src="/logo.png" alt="Closy" className="resultado__closy" />
         <div className="resultado__burbuja">
           <p>{mensaje || "¡Para lo que harás hoy, te recomiendo este outfit!"}</p>
         </div>
@@ -90,9 +89,7 @@ export default function ResultadoOutfit() {
                     className="resultado__prenda-img"
                   />
                 ) : (
-                  <div className="resultado__prenda-placeholder">
-                    <span>👗</span>
-                  </div>
+                  <div className="resultado__prenda-placeholder" />
                 )}
                 <p className="resultado__prenda-nombre">{prenda.nombre}</p>
                 <p className="resultado__prenda-categoria">

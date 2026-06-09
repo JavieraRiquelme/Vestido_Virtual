@@ -67,7 +67,7 @@ export default function MiCloset() {
 
       {!cargando && !error && prendas.length === 0 && (
         <div className="closet__vacio">
-          <span className="closet__vacio-emoji">👗</span>
+          <img src="/logo.png" alt="Closy" className="closet__vacio-logo" />
           <p>Tu closet está vacío.</p>
           <p>¡Agrega tu primera prenda!</p>
         </div>
@@ -87,7 +87,7 @@ export default function MiCloset() {
                 alt={prenda.nombre}
               />
             ) : (
-              <div className="closet__card-placeholder">👗</div>
+              <div className="closet__card-placeholder" />
             )}
             <p className="closet__card-nombre">{prenda.nombre}</p>
             {prenda.color && (
