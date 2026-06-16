@@ -3,7 +3,7 @@ test_clima.py — Tests del servicio de clima
 """
 import pytest
 from unittest.mock import patch, MagicMock
-from app.services.clima import obtener_clima, obtener_clima_gps, _categorizar
+from app.services.clima import obtener_clima, _categorizar
 
 
 def test_categorizar_frio():
@@ -46,25 +46,9 @@ def test_obtener_clima_ciudad_no_encontrada():
             obtener_clima("CiudadFalsa")
 
 
-def test_obtener_clima_gps_ok():
-    mock_respuesta = MagicMock()
-    mock_respuesta.status_code = 200
-    mock_respuesta.json.return_value = {
-        "name": "Santiago",
-        "sys": {"country": "CL"},
-        "main": {"temp": 18.0},
-        "weather": [{"description": "nublado", "icon": "02d"}],
-    }
-    with patch("app.services.clima.requests.get", return_value=mock_respuesta):
-        resultado = obtener_clima_gps(-33.45, -70.67)
-    assert resultado["ciudad"] == "Santiago"
-    assert resultado["temperatura"] == 18.0
-    assert resultado["categoria"] == "templado"
-
-
-def test_obtener_clima_gps_error():
+def test_obtener_clima_error_servidor():
     mock_respuesta = MagicMock()
     mock_respuesta.status_code = 500
     with patch("app.services.clima.requests.get", return_value=mock_respuesta):
         with pytest.raises(Exception, match="Error al obtener el clima"):
-            obtener_clima_gps(-33.45, -70.67)
+            obtener_clima("Santiago")
