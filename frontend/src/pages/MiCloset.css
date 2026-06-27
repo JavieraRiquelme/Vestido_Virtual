@@ -130,6 +130,114 @@
   margin: 0;
 }
 
+/* Acciones sobre la card */
+.closet__card-acciones {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.closet__card-btn {
+  border: none;
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.closet__card-btn--editar {
+  background: #f3eaff;
+  color: #7c3fcf;
+}
+
+.closet__card-btn--eliminar {
+  background: #ffeaea;
+  color: #e53935;
+}
+
+.closet__card-btn:hover { opacity: 0.8; }
+
+/* Modal de edición */
+.closet__modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 300;
+  padding: 16px;
+}
+
+.closet__modal {
+  background: #fff;
+  border-radius: 20px;
+  padding: 24px;
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.closet__modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 800;
+  font-size: 1rem;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.closet__modal-header button {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: var(--text-muted);
+}
+
+.closet__modal-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.closet__modal-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid var(--border-mid);
+  border-radius: 12px;
+  font-size: 0.92rem;
+  font-family: inherit;
+  color: var(--text);
+  background: var(--surface);
+  box-sizing: border-box;
+}
+
+.closet__modal-input:focus {
+  outline: none;
+  border-color: var(--brand);
+}
+
+.closet__modal-guardar {
+  margin-top: 6px;
+  background: var(--brand);
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  padding: 12px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.closet__modal-guardar:disabled { opacity: 0.5; cursor: not-allowed; }
+
 /* FAB */
 .closet__fab {
   position: fixed;

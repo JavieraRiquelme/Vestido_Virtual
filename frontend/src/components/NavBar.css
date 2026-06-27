@@ -56,6 +56,14 @@
   color: #ffffff;
 }
 
+.navbar-burbuja__btn--salir:hover {
+  background: #ffeaea;
+}
+
+.navbar-burbuja__btn--salir .navbar-burbuja__label {
+  color: #e53935;
+}
+
 /* ── Demo banner ───────────────────────────────────────────────── */
 .demo-banner {
   position: fixed;

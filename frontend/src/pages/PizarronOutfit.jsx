@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react"
 import { useNavigate, useLocation } from "react-router-dom"
 import { esDemoMode, getUsuarioId } from "../utils/auth"
 import { MOCK_PRENDAS } from "../utils/mockData"
+import { guardarOutfit } from "../services/outfits"
 import "./PizarronOutfit.css"
 
 const API = import.meta.env.VITE_API_URL || "http://localhost:8000"
@@ -74,6 +75,12 @@ export default function PizarronOutfit() {
   const [sheetMode,      setSheetMode]      = useState(null)  // null | "prendas" | "fondo"
   const [fondo,          setFondo]          = useState("puntos")
   const [exporting,      setExporting]      = useState(false)
+  const [saveModal,      setSaveModal]      = useState(false)
+  const [saveNombre,     setSaveNombre]     = useState("")
+  const [saveOcasion,    setSaveOcasion]    = useState(3)
+  const [saving,         setSaving]         = useState(false)
+  const [saveError,      setSaveError]      = useState(null)
+  const [saveOk,         setSaveOk]         = useState(false)
 
   // ── Historia ────────────────────────────────────────────────────
   const saveHist = useCallback((its) => {
@@ -252,6 +259,22 @@ export default function PizarronOutfit() {
     }
   }
 
+  const handleGuardarOutfit = async () => {
+    if (!saveNombre.trim()) return
+    if (items.length === 0) { setSaveError("Agrega al menos una prenda al pizarrón."); return }
+    if (esDemoMode()) { setSaveOk(true); return }
+    setSaving(true); setSaveError(null)
+    try {
+      const prendaIds = [...new Set(items.map(i => i.prenda.id))]
+      await guardarOutfit(getUsuarioId(), saveNombre.trim(), saveOcasion, null, prendaIds)
+      setSaveOk(true)
+    } catch {
+      setSaveError("No se pudo guardar el outfit.")
+    } finally {
+      setSaving(false)
+    }
+  }
+
   const selItem   = items.find(i => i.id === selected)
   const fondoActual = FONDOS.find(f => f.id === fondo) ?? FONDOS[0]
   const allPrendas = [
@@ -266,9 +289,14 @@ export default function PizarronOutfit() {
       <div className="piz__header">
         <button className="piz__volver" onClick={() => navigate(-1)}>← Volver</button>
         <span className="piz__titulo">Pizarrón</span>
-        <button className="piz__export-btn" onClick={exportarImagen} disabled={exporting}>
-          {exporting ? "Exportando…" : "↓ Guardar imagen"}
-        </button>
+        <div className="piz__header-btns">
+          <button className="piz__save-btn" onClick={() => { setSaveModal(true); setSaveOk(false); setSaveError(null) }}>
+            Guardar outfit
+          </button>
+          <button className="piz__export-btn" onClick={exportarImagen} disabled={exporting}>
+            {exporting ? "Exportando…" : "↓ Imagen"}
+          </button>
+        </div>
       </div>
 
       {/* ── Body ── */}
@@ -451,6 +479,60 @@ export default function PizarronOutfit() {
                   </button>
                 ))}
               </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+
+      {/* ── Modal guardar outfit ── */}
+      {saveModal && (
+        <div className="piz__modal-overlay" onClick={() => setSaveModal(false)}>
+          <div className="piz__modal" onClick={e => e.stopPropagation()}>
+            <div className="piz__modal-head">
+              <span>Guardar outfit</span>
+              <button onClick={() => setSaveModal(false)}>✕</button>
+            </div>
+
+            {saveOk ? (
+              <div className="piz__modal-ok">
+                <p>¡Outfit guardado!</p>
+                <button onClick={() => { setSaveModal(false); navigate("/mis-outfits") }}>
+                  Ver mis outfits
+                </button>
+              </div>
+            ) : (
+              <>
+                <label className="piz__modal-label">Nombre del outfit</label>
+                <input
+                  className="piz__modal-input"
+                  placeholder="ej: Look de lunes"
+                  value={saveNombre}
+                  onChange={e => setSaveNombre(e.target.value)}
+                  autoFocus
+                />
+                <label className="piz__modal-label">Ocasión</label>
+                <select
+                  className="piz__modal-input"
+                  value={saveOcasion}
+                  onChange={e => setSaveOcasion(Number(e.target.value))}
+                >
+                  <option value={1}>Universidad</option>
+                  <option value={2}>Trabajo</option>
+                  <option value={3}>Casual</option>
+                  <option value={4}>Fiesta</option>
+                  <option value={5}>Deporte</option>
+                  <option value={6}>Cita</option>
+                </select>
+                {saveError && <p className="piz__modal-error">{saveError}</p>}
+                <button
+                  className="piz__modal-guardar"
+                  onClick={handleGuardarOutfit}
+                  disabled={saving || !saveNombre.trim()}
+                >
+                  {saving ? "Guardando…" : "Guardar"}
+                </button>
+              </>
             )}
           </div>
         </div>

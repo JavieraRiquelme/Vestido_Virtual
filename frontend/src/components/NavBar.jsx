@@ -47,6 +47,15 @@ export default function NavBar() {
             </button>
           );
         })}
+        {!demo && (
+          <button
+            className="navbar-burbuja__btn navbar-burbuja__btn--salir"
+            onClick={() => { cerrarSesion(); navigate("/login"); }}
+            aria-label="Cerrar sesión"
+          >
+            <span className="navbar-burbuja__label">Salir</span>
+          </button>
+        )}
       </nav>
     </>
   );

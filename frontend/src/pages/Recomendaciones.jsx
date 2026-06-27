@@ -89,8 +89,10 @@ function useBuscarClima() {
   const [errorCiudad, setErrorCiudad]   = useState(null);
   const [sugerencias, setSugerencias]   = useState([]);
   const debounceRef                     = useRef(null);
+  const suppressRef                     = useRef(false);
 
   useEffect(() => {
+    if (suppressRef.current) { suppressRef.current = false; return; }
     const q = inputCiudad.trim();
     if (q.length < 2 || clima) { setSugerencias([]); return; }
 
@@ -110,6 +112,7 @@ function useBuscarClima() {
   }, [inputCiudad]);
 
   async function seleccionarSugerencia(sug) {
+    suppressRef.current = true;
     setSugerencias([]);
     setInputCiudad(sug.nombre);
     setErrorCiudad(null);
@@ -124,7 +127,7 @@ function useBuscarClima() {
     }
 
     try {
-      const res = await fetch(`${API}/clima/gps?lat=${sug.lat}&lon=${sug.lon}`);
+      const res = await fetch(`${API}/clima/ciudad?q=${encodeURIComponent(sug.nombre)}`);
       if (!res.ok) throw new Error();
       setClima(await res.json());
     } catch {
