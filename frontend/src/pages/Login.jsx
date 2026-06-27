@@ -77,6 +77,12 @@ export default function Login() {
           <button className="auth__btn" type="submit" disabled={cargando}>
             {cargando ? 'Entrando...' : 'Iniciar sesión'}
           </button>
+
+          <p style={{ textAlign: 'right', margin: 0 }}>
+            <Link className="auth__link" style={{ fontSize: '0.85rem' }} to="/recuperar-password">
+              ¿Olvidaste tu contraseña?
+            </Link>
+          </p>
         </form>
 
         <p className="auth__link-texto">

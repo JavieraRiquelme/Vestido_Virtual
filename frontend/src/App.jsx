@@ -9,6 +9,8 @@ import SubirPrenda from './pages/SubirPrenda.jsx'
 import PizarronOutfit from './pages/PizarronOutfit.jsx'
 import Login from './pages/Login.jsx'
 import Registro from './pages/Registro.jsx'
+import RecuperarPassword from './pages/RecuperarPassword.jsx'
+import ResetPassword from './pages/ResetPassword.jsx'
 import NavBar from './components/NavBar.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 import { estaAutenticado } from './utils/auth'
@@ -25,6 +27,8 @@ function AppRoutes() {
         path="/registro"
         element={estaAutenticado() ? <Navigate to="/" replace /> : <Registro />}
       />
+      <Route path="/recuperar-password" element={<RecuperarPassword />} />
+      <Route path="/reset-password"     element={<ResetPassword />} />
 
       {/* Rutas protegidas */}
       <Route path="/" element={<ProtectedRoute><Navigate to="/mis-outfits" replace /></ProtectedRoute>} />

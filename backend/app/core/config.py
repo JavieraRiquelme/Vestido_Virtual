@@ -29,6 +29,11 @@ class Settings:
     JWT_ALGORITHM: str = "HS256"
     JWT_EXPIRE_MINUTES: int = 1440
 
+    # Email (Resend)
+    RESEND_API_KEY: str = os.getenv("RESEND_API_KEY", "")
+    FROM_EMAIL: str     = os.getenv("FROM_EMAIL", "Klosy <onboarding@resend.dev>")
+    FRONTEND_URL: str   = os.getenv("FRONTEND_URL", "http://localhost:5173")
+
     # CORS — lista separada por comas en la env var ALLOWED_ORIGINS
     ALLOWED_ORIGINS: list = [
         o.strip()
