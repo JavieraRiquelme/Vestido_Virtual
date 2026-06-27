@@ -483,7 +483,6 @@ export default function PizarronOutfit() {
           </div>
         </div>
       )}
-    </div>
 
       {/* ── Modal guardar outfit ── */}
       {saveModal && (
