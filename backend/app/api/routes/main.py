@@ -1,8 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
+from app.core.database import engine
+from app.models.models import Base
 from app.api.routes import (
-    auth, 
+    auth,
     usuarios,
     prendas,
     categorias,
@@ -13,6 +15,8 @@ from app.api.routes import (
     recomendaciones,
     sugerencias,
 )
+
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Closy API")
 
