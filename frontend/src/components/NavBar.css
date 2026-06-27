@@ -4,13 +4,13 @@
   bottom: 24px;
   left: 50%;
   transform: translateX(-50%);
-  background: #ffffff;
+  background: var(--obsidian);
   border-radius: 50px;
   padding: 8px 12px;
   display: flex;
   align-items: center;
   gap: 4px;
-  box-shadow: 0 8px 32px rgba(155, 93, 229, 0.25), 0 2px 8px rgba(0,0,0,0.08);
+  box-shadow: 0 8px 32px rgba(38, 38, 40, 0.3), 0 2px 8px rgba(0,0,0,0.15);
   z-index: 100;
 }
 
@@ -33,35 +33,35 @@
 }
 
 .navbar-burbuja__btn:hover {
-  background: #f3eaff;
+  background: rgba(198, 194, 242, 0.15);
   transform: translateY(-2px);
 }
 
 .navbar-burbuja__btn--activo {
-  background: #9b5de5;
+  background: var(--lavender);
 }
 
 .navbar-burbuja__btn--activo:hover {
-  background: #7c3fcf;
+  background: #b0abec;
 }
 
 .navbar-burbuja__label {
   font-size: 0.8rem;
   font-weight: 700;
-  color: #9b8ab8;
+  color: rgba(255,255,255,0.55);
   letter-spacing: 0.02em;
 }
 
 .navbar-burbuja__btn--activo .navbar-burbuja__label {
-  color: #ffffff;
+  color: var(--obsidian);
 }
 
 .navbar-burbuja__btn--salir:hover {
-  background: #ffeaea;
+  background: rgba(219, 96, 114, 0.2);
 }
 
 .navbar-burbuja__btn--salir .navbar-burbuja__label {
-  color: #e53935;
+  color: var(--cherry);
 }
 
 /* ── Demo banner ───────────────────────────────────────────────── */
@@ -70,8 +70,8 @@
   top: 0;
   left: 0;
   right: 0;
-  background: #9b5de5;
-  color: #fff;
+  background: var(--obsidian);
+  color: var(--cream);
   font-size: 0.78rem;
   font-weight: 700;
   text-align: center;

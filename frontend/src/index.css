@@ -2,24 +2,31 @@
 
 /* ── Design tokens ───────────────────────────────────────────────── */
 :root {
-  /* Colores */
-  --bg:            #f3eaff;
+  /* Paleta Klosy */
+  --lavender:   #C6C2F2;
+  --obsidian:   #262628;
+  --cream:      #FFF6EE;
+  --lime:       #D6DC82;
+  --cherry:     #DB6072;
+
+  /* Roles semánticos */
+  --bg:            var(--cream);
   --surface:       #ffffff;
-  --surface-soft:  #faf5ff;
-  --surface-hover: #ede0ff;
+  --surface-soft:  #FFFAF5;
+  --surface-hover: #F0EEF9;
 
-  --brand:         #9b5de5;
-  --brand-dark:    #7c3aed;
+  --brand:         var(--lavender);
+  --brand-dark:    var(--obsidian);
 
-  --text:          #2d1560;
-  --text-soft:     #6b5b8a;
-  --text-muted:    #a98ad4;
+  --text:          var(--obsidian);
+  --text-soft:     #5a5a5c;
+  --text-muted:    #9a9a9c;
 
-  --border:        #e4d4f9;
-  --border-mid:    #d8b4fe;
+  --border:        #E8E4F8;
+  --border-mid:    var(--lavender);
 
   --error-bg:      #fef2f2;
-  --error-text:    #dc2626;
+  --error-text:    var(--cherry);
 
   /* Radios */
   --radius-sm:   10px;
@@ -28,8 +35,8 @@
   --radius-pill: 50px;
 
   /* Sombras */
-  --shadow-card: 0 2px 16px rgba(107, 33, 168, 0.08);
-  --shadow-btn:  0 4px 16px rgba(124, 58, 237, 0.35);
+  --shadow-card: 0 2px 16px rgba(38, 38, 40, 0.07);
+  --shadow-btn:  0 4px 16px rgba(38, 38, 40, 0.25);
 
   /* Espaciado de página */
   --page-px:  16px;
