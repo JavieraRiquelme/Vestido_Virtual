@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.models.models import Clima
-from app.services.clima import obtener_clima, obtener_clima_gps
+from app.services.clima import obtener_clima
 from app.core.config import settings
 
 router = APIRouter()
@@ -41,22 +41,13 @@ def consultar_por_ciudad(q: str = Query(..., description="Nombre de la ciudad"))
     return datos
 
 
-@router.get("/gps")
-def consultar_por_gps(lat: float, lon: float):
-    try:
-        datos = obtener_clima_gps(lat, lon)
-    except Exception as e:
-        raise HTTPException(status_code=503, detail=str(e))
-    return datos
-
 
 @router.get("/consultar")
-def consultar_clima(lat: float, lon: float, db: Session = Depends(get_db)):
+def consultar_clima(ciudad: str, db: Session = Depends(get_db)):
     try:
-        datos = obtener_clima_gps(lat, lon)
+        datos = obtener_clima(ciudad)
     except Exception as e:
         raise HTTPException(status_code=503, detail=str(e))
-
     registro = Clima(
         ciudad=datos["ciudad"],
         pais=datos.get("pais"),
