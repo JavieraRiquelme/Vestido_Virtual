@@ -23,7 +23,7 @@
 .crear-outfit__titulo {
   font-size: 1.6rem;
   font-weight: 800;
-  color: #3a0d6e;
+  color: var(--obsidian);
 }
 
 .crear-outfit__card {
@@ -39,14 +39,14 @@
 }
 
 .crear-outfit__card p {
-  color: #555;
+  color: var(--text-soft);
   font-size: 0.95rem;
   line-height: 1.5;
 }
 
 .crear-outfit__btn {
-  background: #9b5de5;
-  color: white;
+  background: var(--obsidian);
+  color: var(--cream);
   border: none;
   border-radius: 12px;
   padding: 0.8rem 2rem;
@@ -58,5 +58,5 @@
 }
 
 .crear-outfit__btn:hover {
-  background: #7c3aed;
+  background: #3a3a3c;
 }

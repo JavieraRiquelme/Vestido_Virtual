@@ -47,12 +47,12 @@
 }
 
 .subir__foto:active {
-  border-color: var(--brand);
+  border-color: var(--lavender);
 }
 
 .subir__foto--con-imagen {
   border-style: solid;
-  border-color: var(--brand);
+  border-color: var(--lavender);
 }
 
 .subir__foto-icono {
@@ -100,7 +100,7 @@
 }
 
 .subir__input:focus {
-  border-color: var(--brand);
+  border-color: var(--obsidian);
 }
 
 .subir__error {
@@ -112,8 +112,8 @@
 
 .subir__btn {
   padding: 14px;
-  background: var(--brand);
-  color: var(--surface);
+  background: var(--obsidian);
+  color: var(--cream);
   border: none;
   border-radius: var(--radius-md);
   font-family: 'Nunito', sans-serif;
@@ -126,10 +126,10 @@
 
 .subir__btn:active {
   transform: scale(0.97);
-  background: var(--brand-dark);
+  background: #3a3a3c;
 }
 
 .subir__btn:disabled {
-  background: var(--border-mid);
+  background: var(--text-muted);
   cursor: not-allowed;
 }

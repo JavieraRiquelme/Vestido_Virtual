@@ -58,7 +58,7 @@
 }
 
 .detalle__tag--ocasion { background: var(--surface-hover); color: var(--text-soft); }
-.detalle__tag--clima   { background: #e0f0ff; color: #1a5c8a; }
+.detalle__tag--clima   { background: var(--border); color: var(--text-soft); }
 
 .detalle__fecha { font-size: 0.78rem; color: var(--text-muted); margin: 0; }
 
@@ -152,5 +152,5 @@
   text-align: center;
 }
 
-.detalle__card-cat  { font-size: 0.72rem; color: var(--brand);      margin: 0; }
+.detalle__card-cat  { font-size: 0.72rem; color: var(--text-muted); margin: 0; }
 .detalle__card-color { font-size: 0.7rem;  color: var(--text-muted); margin: 2px 0 0; }

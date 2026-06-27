@@ -59,9 +59,9 @@
 }
 
 .piz__save-btn {
-  background: #fff;
-  color: var(--brand);
-  border: 2px solid var(--brand);
+  background: var(--surface);
+  color: var(--obsidian);
+  border: 1.5px solid var(--border);
   border-radius: var(--radius-pill);
   padding: 5px 12px;
   font-family: 'Nunito', sans-serif;
@@ -69,13 +69,13 @@
   font-weight: 700;
   cursor: pointer;
   white-space: nowrap;
-  transition: background 0.15s, color 0.15s;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
 }
-.piz__save-btn:hover { background: var(--brand); color: #fff; }
+.piz__save-btn:hover { background: var(--obsidian); color: var(--cream); border-color: var(--obsidian); }
 
 .piz__export-btn {
-  background: var(--brand);
-  color: #fff;
+  background: var(--obsidian);
+  color: var(--cream);
   border: none;
   border-radius: var(--radius-pill);
   padding: 6px 14px;
@@ -86,7 +86,7 @@
   white-space: nowrap;
   transition: background 0.15s, opacity 0.15s;
 }
-.piz__export-btn:hover:not(:disabled) { background: var(--brand-dark); }
+.piz__export-btn:hover:not(:disabled) { background: #3a3a3c; }
 .piz__export-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
 /* ── Modal guardar outfit ───────────────────────────────────────── */
@@ -158,8 +158,8 @@
 
 .piz__modal-guardar {
   margin-top: 4px;
-  background: var(--brand);
-  color: #fff;
+  background: var(--obsidian);
+  color: var(--cream);
   border: none;
   border-radius: 14px;
   padding: 12px;
@@ -183,12 +183,12 @@
 .piz__modal-ok p {
   font-size: 1.1rem;
   font-weight: 800;
-  color: var(--brand);
+  color: var(--obsidian);
 }
 
 .piz__modal-ok button {
-  background: var(--brand);
-  color: #fff;
+  background: var(--obsidian);
+  color: var(--cream);
   border: none;
   border-radius: 14px;
   padding: 10px 24px;
@@ -342,7 +342,7 @@
   -webkit-user-select: none;
   /* background viene del style inline (fondo dinámico) */
   background-color: #fff;
-  background-image: radial-gradient(circle,#c8b6e2 1.2px,transparent 1.2px);
+  background-image: radial-gradient(circle, rgba(198,194,242,0.55) 1.2px, transparent 1.2px);
   background-size: 22px 22px;
 }
 
@@ -433,19 +433,19 @@
 }
 
 .piz__madd {
-  background: var(--brand);
-  color: #fff; border: none; border-radius: var(--radius-pill);
+  background: var(--obsidian);
+  color: var(--cream); border: none; border-radius: var(--radius-pill);
   padding: 6px 12px;
   font-family: 'Nunito', sans-serif; font-size: 0.8rem; font-weight: 700;
   cursor: pointer; white-space: nowrap; flex-shrink: 0; transition: background 0.15s;
 }
-.piz__madd:hover { background: var(--brand-dark); }
+.piz__madd:hover { background: #3a3a3c; }
 .piz__madd--sec {
   background: var(--surface-hover);
-  color: var(--brand-dark);
-  border: 1.5px solid var(--border-mid);
+  color: var(--obsidian);
+  border: 1.5px solid var(--border);
 }
-.piz__madd--sec:hover { background: #dfc8ff; }
+.piz__madd--sec:hover { background: var(--lavender); }
 
 .piz__mshapes { display: flex; gap: 4px; flex-shrink: 0; }
 
@@ -488,7 +488,7 @@
 /* ── Sheet overlay ──────────────────────────────────────────────── */
 .piz__overlay {
   position: fixed; inset: 0;
-  background: rgba(45,21,96,.42); z-index: 400;
+  background: rgba(38,38,40,.48); z-index: 400;
   display: flex; align-items: flex-end;
 }
 
