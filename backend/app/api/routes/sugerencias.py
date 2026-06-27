@@ -31,7 +31,7 @@ class GuardarOutfitRequest(BaseModel):
     usuario_id: int
     nombre: str
     ocasion_id: int
-    ideal_clima: str
+    ideal_clima: str | None = None
     prenda_ids: list[int]
 
 

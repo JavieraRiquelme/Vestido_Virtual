@@ -292,10 +292,11 @@ export default function Recomendaciones() {
       });
       navigate("/resultado-outfit", {
         state: {
-          prendas:    resultado.prendas,
-          mensaje:    resultado.mensaje,
-          nivelClima: resultado.nivel_clima,
+          prendas:     resultado.prendas,
+          mensaje:     resultado.mensaje,
+          nivelClima:  resultado.nivel_clima,
           ocasion,
+          temperatura: origen.clima?.temperatura ?? destino.clima?.temperatura ?? temperatura,
         },
       });
     } catch (e) {
