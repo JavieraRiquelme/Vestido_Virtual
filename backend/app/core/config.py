@@ -15,8 +15,10 @@ class Settings:
     OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
     OPENAI_MODEL: str = "gpt-4o"
     
-    # Base de datos
-    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./datos.db")
+    # Base de datos — corrige postgres:// → postgresql:// (Supabase entrega postgres://)
+    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./datos.db").replace(
+        "postgres://", "postgresql://", 1
+    )
     
     # Configuración general
     APP_NAME: str = os.getenv("APP_NAME", "Closy")
