@@ -64,9 +64,9 @@
 }
 
 .closet__chip--activo {
-  background: var(--brand);
-  border-color: var(--brand);
-  color: var(--surface);
+  background: var(--obsidian);
+  border-color: var(--obsidian);
+  color: var(--cream);
 }
 
 /* Grid — 2 → 3 → 4 columnas */
@@ -148,13 +148,13 @@
 }
 
 .closet__card-btn--editar {
-  background: #f3eaff;
-  color: #7c3fcf;
+  background: var(--surface-hover);
+  color: var(--obsidian);
 }
 
 .closet__card-btn--eliminar {
-  background: #ffeaea;
-  color: #e53935;
+  background: var(--error-bg);
+  color: var(--cherry);
 }
 
 .closet__card-btn:hover { opacity: 0.8; }
@@ -225,8 +225,8 @@
 
 .closet__modal-guardar {
   margin-top: 6px;
-  background: var(--brand);
-  color: #fff;
+  background: var(--obsidian);
+  color: var(--cream);
   border: none;
   border-radius: 14px;
   padding: 12px;
@@ -246,8 +246,8 @@
   width: 52px;
   height: 52px;
   border-radius: 50%;
-  background: var(--brand);
-  color: var(--surface);
+  background: var(--obsidian);
+  color: var(--cream);
   font-size: 1.8rem;
   border: none;
   box-shadow: var(--shadow-btn);
@@ -260,7 +260,7 @@
 
 .closet__fab:active {
   transform: scale(0.93);
-  background: var(--brand-dark);
+  background: #3a3a3c;
 }
 
 @media (min-width: 1024px) {

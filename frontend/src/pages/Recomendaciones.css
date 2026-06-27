@@ -21,14 +21,14 @@
 .recomendaciones__titulo {
   font-size: 1.9rem;
   font-weight: 900;
-  color: #2d1560;
+  color: var(--obsidian);
   margin: 0 0 4px;
   letter-spacing: -0.02em;
 }
 
 .recomendaciones__subtitulo {
   font-size: 0.95rem;
-  color: #8b6fb3;
+  color: var(--text-soft);
   margin: 0;
   font-weight: 600;
 }
@@ -44,13 +44,13 @@
 .recomendaciones__pregunta {
   font-size: 1rem;
   font-weight: 800;
-  color: #2d1560;
+  color: var(--obsidian);
   margin: 0 0 14px;
 }
 
 .recomendaciones__hint {
   font-size: 0.8rem;
-  color: #a98ad4;
+  color: var(--text-muted);
   font-weight: 600;
   margin: -8px 0 14px;
 }
@@ -65,14 +65,14 @@
 .recomendaciones__buscador-label {
   font-size: 0.78rem;
   font-weight: 700;
-  color: #a98ad4;
+  color: var(--text-muted);
   letter-spacing: 0.03em;
   text-transform: uppercase;
 }
 
 .recomendaciones__ciudad-separador {
   height: 1px;
-  background: #f0e6ff;
+  background: var(--border);
   margin: 14px 0;
 }
 
@@ -88,24 +88,24 @@
 .recomendaciones__ciudad-input {
   flex: 1;
   padding: 11px 14px;
-  border: 1.5px solid #e4d4f9;
+  border: 1.5px solid var(--border);
   border-radius: 14px;
   font-size: 0.95rem;
   font-family: 'Nunito', sans-serif;
-  color: #2d1560;
-  background: #faf5ff;
+  color: var(--obsidian);
+  background: var(--surface-soft);
   outline: none;
   transition: border-color 0.2s, background 0.2s;
 }
 
 .recomendaciones__ciudad-input:focus {
-  border-color: #9b5de5;
-  background: #fff;
+  border-color: var(--obsidian);
+  background: var(--surface);
 }
 
 .recomendaciones__ciudad-btn--gps {
-  background: #f0e6ff;
-  color: #7c3aed;
+  background: var(--border);
+  color: var(--obsidian);
   padding: 11px 13px;
   border: none;
   border-radius: 14px;
@@ -116,7 +116,7 @@
 }
 
 .recomendaciones__ciudad-btn--gps:hover:not(:disabled) {
-  background: #e4d4f9;
+  background: var(--lavender);
 }
 
 .recomendaciones__ciudad-btn--gps:disabled {
@@ -126,7 +126,7 @@
 
 .recomendaciones__ciudad-error {
   font-size: 0.82rem;
-  color: #dc2626;
+  color: var(--cherry);
   font-weight: 600;
   margin: 0;
 }
@@ -137,14 +137,14 @@
   top: calc(100% + 4px);
   left: 0;
   right: 0;
-  background: #fff;
-  border: 1.5px solid #d8b4fe;
+  background: var(--surface);
+  border: 1.5px solid var(--lavender);
   border-radius: 14px;
   overflow: hidden;
   list-style: none;
   margin: 0;
   padding: 4px 0;
-  box-shadow: 0 8px 24px rgba(107, 33, 168, 0.14);
+  box-shadow: var(--shadow-card);
   z-index: 50;
 }
 
@@ -158,18 +158,18 @@
 }
 
 .recomendaciones__dropdown-item:hover {
-  background: #f3e8ff;
+  background: var(--surface-hover);
 }
 
 .recomendaciones__dropdown-nombre {
   font-weight: 700;
   font-size: 0.9rem;
-  color: #2d1560;
+  color: var(--obsidian);
 }
 
 .recomendaciones__dropdown-meta {
   font-size: 0.78rem;
-  color: #a98ad4;
+  color: var(--text-muted);
 }
 
 /* Clima resultado */
@@ -177,7 +177,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  background: linear-gradient(135deg, #f0e6ff 0%, #e9d5ff 100%);
+  background: linear-gradient(135deg, #EFEDFC 0%, var(--lavender) 100%);
   border-radius: 14px;
   padding: 12px 16px;
 }
@@ -190,13 +190,13 @@
 .recomendaciones__clima-ciudad {
   font-weight: 800;
   font-size: 1rem;
-  color: #2d1560;
+  color: var(--obsidian);
   margin: 0;
 }
 
 .recomendaciones__clima-detalle {
   font-size: 0.82rem;
-  color: #7c3aed;
+  color: var(--text-soft);
   margin: 0;
   font-weight: 600;
 }
@@ -226,7 +226,7 @@
   width: 100%;
   height: 6px;
   border-radius: 50px;
-  background: linear-gradient(to right, #93c5fd 0%, #c4b5fd 40%, #fb923c 100%);
+  background: linear-gradient(to right, var(--lavender) 0%, #EFEDFC 40%, var(--cherry) 100%);
   outline: none;
   cursor: pointer;
   transition: opacity 0.2s;
@@ -243,9 +243,9 @@
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: #fff;
-  border: 3px solid #9b5de5;
-  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.3);
+  background: var(--surface);
+  border: 3px solid var(--obsidian);
+  box-shadow: 0 2px 8px rgba(38, 38, 40, 0.25);
   cursor: pointer;
   transition: border-color 0.2s, transform 0.15s;
 }
@@ -258,9 +258,9 @@
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: #fff;
-  border: 3px solid #9b5de5;
-  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.3);
+  background: var(--surface);
+  border: 3px solid var(--obsidian);
+  box-shadow: 0 2px 8px rgba(38, 38, 40, 0.25);
   cursor: pointer;
 }
 
@@ -269,7 +269,7 @@
   justify-content: space-between;
   font-size: 0.72rem;
   font-weight: 700;
-  color: #a98ad4;
+  color: var(--text-muted);
 }
 
 /* ── Prenda fija ─────────────────────────────────────────────────── */
@@ -291,27 +291,27 @@
   gap: 6px;
   white-space: nowrap;
   flex-shrink: 0;
-  background: #faf5ff;
-  border: 1.5px solid #e4d4f9;
+  background: var(--surface-soft);
+  border: 1.5px solid var(--border);
   border-radius: 50px;
   padding: 7px 14px;
   font-family: 'Nunito', sans-serif;
   font-size: 0.85rem;
   font-weight: 700;
-  color: #5a3e82;
+  color: var(--text-soft);
   cursor: pointer;
   transition: all 0.15s ease;
 }
 
 .recomendaciones__prenda-chip:hover {
-  border-color: #9b5de5;
-  background: #ede0ff;
+  border-color: var(--lavender);
+  background: var(--surface-hover);
 }
 
 .recomendaciones__prenda-chip--activo {
-  background: #2d1560;
-  border-color: #2d1560;
-  color: #fff;
+  background: var(--obsidian);
+  border-color: var(--obsidian);
+  color: var(--cream);
 }
 
 .recomendaciones__prenda-color {
@@ -330,28 +330,28 @@
 }
 
 .recomendaciones__estilo-chip {
-  background: #faf5ff;
-  border: 1.5px solid #e4d4f9;
+  background: var(--surface-soft);
+  border: 1.5px solid var(--border);
   border-radius: 50px;
   padding: 8px 18px;
   font-family: 'Nunito', sans-serif;
   font-size: 0.88rem;
   font-weight: 700;
-  color: #5a3e82;
+  color: var(--text-soft);
   cursor: pointer;
   transition: all 0.15s ease;
 }
 
 .recomendaciones__estilo-chip:hover {
-  border-color: #9b5de5;
-  background: #ede0ff;
+  border-color: var(--lavender);
+  background: var(--surface-hover);
 }
 
 .recomendaciones__estilo-chip--activo {
-  background: #9b5de5;
-  border-color: #9b5de5;
-  color: #fff;
-  box-shadow: 0 3px 10px rgba(155, 93, 229, 0.3);
+  background: var(--obsidian);
+  border-color: var(--obsidian);
+  color: var(--cream);
+  box-shadow: var(--shadow-btn);
 }
 
 /* ── Ocasiones ───────────────────────────────────────────────────── */
@@ -362,32 +362,32 @@
 }
 
 .recomendaciones__ocasion-btn {
-  background: #faf5ff;
-  border: 1.5px solid #e4d4f9;
+  background: var(--surface-soft);
+  border: 1.5px solid var(--border);
   border-radius: 16px;
   padding: 14px 8px;
   font-family: 'Nunito', sans-serif;
   font-size: 0.88rem;
   font-weight: 700;
-  color: #5a3e82;
+  color: var(--text-soft);
   cursor: pointer;
   transition: all 0.18s ease;
   text-align: center;
 }
 
 .recomendaciones__ocasion-btn:hover {
-  border-color: #9b5de5;
-  background: #ede0ff;
+  border-color: var(--lavender);
+  background: var(--surface-hover);
 }
 
 .recomendaciones__ocasion-btn--activo {
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22);
 }
 
 /* ── Botones ─────────────────────────────────────────────────────── */
 .recomendaciones__error {
-  background: #ffe4e4;
-  color: #c0392b;
+  background: var(--error-bg);
+  color: var(--cherry);
   border-radius: 12px;
   padding: 10px 16px;
   font-size: 0.88rem;
@@ -421,23 +421,23 @@
 }
 
 .recomendaciones__btn--principal {
-  background: linear-gradient(135deg, #9b5de5 0%, #7c3aed 100%);
-  color: #fff;
-  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.38);
+  background: var(--obsidian);
+  color: var(--cream);
+  box-shadow: var(--shadow-btn);
 }
 
 .recomendaciones__btn--principal:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(124, 58, 237, 0.48);
+  box-shadow: 0 8px 28px rgba(38, 38, 40, 0.4);
 }
 
 .recomendaciones__btn--secundario {
-  background: #fff;
-  color: #7c3aed;
-  border: 1.5px solid #e4d4f9;
+  background: var(--surface);
+  color: var(--obsidian);
+  border: 1.5px solid var(--border);
 }
 
 .recomendaciones__btn--secundario:hover:not(:disabled) {
-  background: #f3e8ff;
-  border-color: #c4b5fd;
+  background: var(--surface-hover);
+  border-color: var(--lavender);
 }

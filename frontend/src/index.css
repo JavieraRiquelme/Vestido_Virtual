@@ -86,7 +86,9 @@ body {
 
 h1, h2, h3 {
   font-family: 'Fredoka', 'Nunito', sans-serif;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
 }
 
 /* ── Layout shell ────────────────────────────────────────────────── */

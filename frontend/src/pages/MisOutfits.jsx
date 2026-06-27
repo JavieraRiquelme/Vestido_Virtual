@@ -8,14 +8,14 @@ import "./MisOutfits.css"
 const API = import.meta.env.VITE_API_URL || "http://localhost:8000"
 
 const OCASION_CFG = {
-  1: { label: "Universidad", bg: "linear-gradient(145deg,#60a5fa,#3b82f6,#1d4ed8)" },
-  2: { label: "Trabajo",     bg: "linear-gradient(145deg,#818cf8,#4f46e5,#312e81)" },
-  3: { label: "Casual",      bg: "linear-gradient(145deg,#fbbf24,#f59e0b,#b45309)" },
-  4: { label: "Fiesta",      bg: "linear-gradient(145deg,#f472b6,#ec4899,#be185d)" },
-  5: { label: "Deporte",     bg: "linear-gradient(145deg,#34d399,#10b981,#065f46)" },
-  6: { label: "Cita",        bg: "linear-gradient(145deg,#fb7185,#f43f5e,#be123c)" },
+  1: { label: "Universidad", bg: "linear-gradient(145deg,#C6C2F2,#9B96E0)" },
+  2: { label: "Trabajo",     bg: "linear-gradient(145deg,#3C3C3E,#262628)" },
+  3: { label: "Casual",      bg: "linear-gradient(145deg,#E8EC9A,#D6DC82)" },
+  4: { label: "Fiesta",      bg: "linear-gradient(145deg,#E88092,#DB6072)" },
+  5: { label: "Deporte",     bg: "linear-gradient(145deg,#D6DC82,#C8CE60)" },
+  6: { label: "Cita",        bg: "linear-gradient(145deg,#DB6072,#C04060)" },
 }
-const DEFAULT_BG = "linear-gradient(145deg,#c4b5fd,#9b5de5,#7c3aed)"
+const DEFAULT_BG = "linear-gradient(145deg,#C6C2F2,#9B96E0)"
 const CLIMA_LABEL = { frio: "Frío", templado: "Templado", calor: "Calor" }
 
 export default function MisOutfits() {

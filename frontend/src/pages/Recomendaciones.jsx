@@ -23,50 +23,50 @@ const OCASIONES = [
   {
     id: "universidad", label: "Universidad",
     patron: {
-      backgroundColor: "#3b82f6",
-      backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 8px, rgba(255,255,255,0.18) 8px, rgba(255,255,255,0.18) 9px)",
-      borderColor: "#2563eb", color: "#fff",
+      backgroundColor: "#9B96E0",
+      backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 8px, rgba(255,255,255,0.22) 8px, rgba(255,255,255,0.22) 9px)",
+      borderColor: "#7D78C8", color: "#fff",
     },
   },
   {
     id: "trabajo", label: "Trabajo",
     patron: {
-      backgroundColor: "#4338ca",
-      backgroundImage: "repeating-linear-gradient(90deg, transparent, transparent 10px, rgba(255,255,255,0.14) 10px, rgba(255,255,255,0.14) 11px)",
-      borderColor: "#3730a3", color: "#fff",
+      backgroundColor: "#262628",
+      backgroundImage: "repeating-linear-gradient(90deg, transparent, transparent 10px, rgba(255,255,255,0.12) 10px, rgba(255,255,255,0.12) 11px)",
+      borderColor: "#1a1a1c", color: "#FFF6EE",
     },
   },
   {
     id: "casual", label: "Casual",
     patron: {
-      backgroundColor: "#d97706",
-      backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.24) 1.5px, transparent 1.5px)",
+      backgroundColor: "#C8CE60",
+      backgroundImage: "radial-gradient(circle, rgba(38,38,40,0.18) 1.5px, transparent 1.5px)",
       backgroundSize: "10px 10px",
-      borderColor: "#b45309", color: "#fff",
+      borderColor: "#A8AE40", color: "#262628",
     },
   },
   {
     id: "fiesta", label: "Fiesta",
     patron: {
-      backgroundColor: "#db2777",
-      backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(255,255,255,0.15) 5px, rgba(255,255,255,0.15) 6px), repeating-linear-gradient(-45deg, transparent, transparent 5px, rgba(255,255,255,0.10) 5px, rgba(255,255,255,0.10) 6px)",
-      borderColor: "#be185d", color: "#fff",
+      backgroundColor: "#DB6072",
+      backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(255,255,255,0.18) 5px, rgba(255,255,255,0.18) 6px), repeating-linear-gradient(-45deg, transparent, transparent 5px, rgba(255,255,255,0.12) 5px, rgba(255,255,255,0.12) 6px)",
+      borderColor: "#BF4050", color: "#fff",
     },
   },
   {
     id: "deporte", label: "Deporte",
     patron: {
-      backgroundColor: "#059669",
-      backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 6px, rgba(255,255,255,0.16) 6px, rgba(255,255,255,0.16) 8px)",
-      borderColor: "#047857", color: "#fff",
+      backgroundColor: "#D6DC82",
+      backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 6px, rgba(38,38,40,0.15) 6px, rgba(38,38,40,0.15) 8px)",
+      borderColor: "#B8C060", color: "#262628",
     },
   },
   {
     id: "cita", label: "Cita",
     patron: {
-      backgroundColor: "#e11d48",
-      backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 8px, rgba(255,255,255,0.13) 8px, rgba(255,255,255,0.13) 9px), repeating-linear-gradient(135deg, transparent, transparent 8px, rgba(255,255,255,0.13) 8px, rgba(255,255,255,0.13) 9px)",
-      borderColor: "#be123c", color: "#fff",
+      backgroundColor: "#C04060",
+      backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 8px, rgba(255,255,255,0.15) 8px, rgba(255,255,255,0.15) 9px), repeating-linear-gradient(135deg, transparent, transparent 8px, rgba(255,255,255,0.10) 8px, rgba(255,255,255,0.10) 9px)",
+      borderColor: "#A03050", color: "#fff",
     },
   },
 ];
