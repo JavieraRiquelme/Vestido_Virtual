@@ -5,7 +5,7 @@
   z-index: 99;           /* NavBar pill es z-index:100 → flota encima */
   display: flex;
   flex-direction: column;
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   background: #fff;
 }
 
@@ -33,7 +33,7 @@
   background: none;
   border: none;
   color: var(--brand-dark);
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 0.88rem;
   font-weight: 700;
   cursor: pointer;
@@ -64,7 +64,7 @@
   border: 1.5px solid var(--border);
   border-radius: var(--radius-pill);
   padding: 5px 12px;
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 0.82rem;
   font-weight: 700;
   cursor: pointer;
@@ -74,19 +74,19 @@
 .piz__save-btn:hover { background: var(--obsidian); color: var(--cream); border-color: var(--obsidian); }
 
 .piz__export-btn {
-  background: var(--obsidian);
-  color: var(--cream);
+  background: var(--cta);
+  color: var(--cta-text);
   border: none;
   border-radius: var(--radius-pill);
   padding: 6px 14px;
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 0.82rem;
   font-weight: 700;
   cursor: pointer;
   white-space: nowrap;
   transition: background 0.15s, opacity 0.15s;
 }
-.piz__export-btn:hover:not(:disabled) { background: #3a3a3c; }
+.piz__export-btn:hover:not(:disabled) { background: #c8ce70; }
 .piz__export-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
 /* ── Modal guardar outfit ───────────────────────────────────────── */
@@ -251,7 +251,7 @@
   padding: 6px 8px;
   cursor: pointer;
   transition: all 0.15s;
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   text-align: left; width: 100%;
 }
 .piz__prenda-row:hover { border-color: var(--brand); background: var(--surface-hover); }
@@ -274,7 +274,7 @@
   border: 1.5px dashed var(--border-mid);
   border-radius: var(--radius-md);
   color: var(--brand-dark);
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 0.8rem; font-weight: 700;
   padding: 7px; cursor: pointer; transition: all 0.15s;
 }
@@ -287,7 +287,7 @@
   border: 1.5px solid var(--border);
   border-radius: var(--radius-md);
   padding: 7px 9px; cursor: pointer; transition: all 0.15s;
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 0.8rem; font-weight: 700; color: var(--text-soft);
 }
 .piz__shape-row:hover:not(:disabled) { border-color: var(--brand); background: var(--surface-hover); color: var(--brand-dark); }
@@ -323,7 +323,7 @@
   border: 1.5px solid var(--border);
   border-radius: var(--radius-md);
   color: var(--text-soft);
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 0.82rem; font-weight: 700;
   padding: 9px; cursor: pointer; transition: all 0.15s;
 }
@@ -436,7 +436,7 @@
   background: var(--obsidian);
   color: var(--cream); border: none; border-radius: var(--radius-pill);
   padding: 6px 12px;
-  font-family: 'Nunito', sans-serif; font-size: 0.8rem; font-weight: 700;
+  font-family: 'Space Grotesk', sans-serif; font-size: 0.8rem; font-weight: 700;
   cursor: pointer; white-space: nowrap; flex-shrink: 0; transition: background 0.15s;
 }
 .piz__madd:hover { background: #3a3a3c; }
@@ -468,7 +468,7 @@
   background: var(--surface-soft); color: var(--text-soft);
   font-size: 0.9rem; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0; transition: all 0.15s; font-family: 'Nunito', sans-serif;
+  flex-shrink: 0; transition: all 0.15s; font-family: 'Space Grotesk', sans-serif;
 }
 .piz__micon:hover:not(:disabled) { background: var(--surface-hover); border-color: var(--brand); color: var(--brand-dark); }
 .piz__micon--del { color: #dc2626; border-color: #fecaca; background: #fef2f2; }
@@ -528,7 +528,7 @@
   background: var(--surface-soft); border: 1.5px solid var(--border);
   border-radius: var(--radius-md); padding: 8px 6px 10px;
   cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 6px;
-  transition: all .15s; font-family: 'Nunito', sans-serif;
+  transition: all .15s; font-family: 'Space Grotesk', sans-serif;
 }
 .piz__sheet-item:hover { border-color: var(--brand); background: var(--surface-hover); transform: translateY(-2px); }
 
@@ -551,7 +551,7 @@
   border: 2px solid var(--border);
   cursor: pointer; transition: all .15s;
   display: flex; align-items: center; justify-content: center;
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
 }
 .piz__sheet-fondo:hover { border-color: var(--brand); }
 .piz__sheet-fondo--act { border-color: var(--brand); box-shadow: 0 0 0 2px var(--brand); }

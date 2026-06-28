@@ -90,7 +90,7 @@
   padding: 12px 14px;
   border: 1.5px solid var(--border-mid);
   border-radius: var(--radius-md);
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 1rem;
   color: var(--text);
   background: var(--surface);
@@ -112,11 +112,11 @@
 
 .subir__btn {
   padding: 14px;
-  background: var(--obsidian);
-  color: var(--cream);
+  background: var(--cta);
+  color: var(--cta-text);
   border: none;
   border-radius: var(--radius-md);
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 1.05rem;
   font-weight: 800;
   cursor: pointer;
@@ -126,7 +126,7 @@
 
 .subir__btn:active {
   transform: scale(0.97);
-  background: #3a3a3c;
+  background: #c0c660;
 }
 
 .subir__btn:disabled {

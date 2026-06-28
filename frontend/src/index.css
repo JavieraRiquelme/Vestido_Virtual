@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Nunito:wght@400;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 
 /* ── Design tokens ───────────────────────────────────────────────── */
 :root {
@@ -17,6 +17,10 @@
 
   --brand:         var(--lavender);
   --brand-dark:    var(--obsidian);
+
+  /* CTA principal — Lime + texto Obsidian */
+  --cta:      var(--lime);
+  --cta-text: var(--obsidian);
 
   --text:          var(--obsidian);
   --text-soft:     #5a5a5c;
@@ -41,7 +45,7 @@
   /* Espaciado de página */
   --page-px:  16px;
   --page-pt:  24px;
-  --page-pb:  100px;    /* espacio para navbar flotante */
+  --page-pb:  100px;
 
   /* Cards */
   --card-px:  16px;
@@ -51,7 +55,6 @@
   --gap:      12px;
 }
 
-/* Breakpoint md (≥ 640px) */
 @media (min-width: 640px) {
   :root {
     --page-px: 24px;
@@ -61,7 +64,6 @@
   }
 }
 
-/* Breakpoint lg (≥ 1024px) */
 @media (min-width: 1024px) {
   :root {
     --page-px:  40px;
@@ -78,18 +80,28 @@
   padding: 0;
 }
 
+/* Inputs y botones heredan la fuente */
+input, button, textarea, select {
+  font-family: inherit;
+}
+
 body {
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   background: var(--bg);
   color: var(--text);
+  -webkit-font-smoothing: antialiased;
 }
 
 h1, h2, h3 {
-  font-family: 'Fredoka', 'Nunito', sans-serif;
+  font-family: 'Space Grotesk', sans-serif;
   font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
 }
+
+h1 { font-size: clamp(2rem, 5vw, 3rem); }
+h2 { font-size: clamp(1.5rem, 3.5vw, 2rem); }
+h3 { font-size: clamp(1.1rem, 2.5vw, 1.4rem); }
 
 /* ── Layout shell ────────────────────────────────────────────────── */
 .app-shell {
