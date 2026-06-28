@@ -1,4 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { useEffect } from 'react'
+import { supabase } from './lib/supabase'
 import MisOutfits from './pages/MisOutfits.jsx'
 import Recomendaciones from './pages/Recomendaciones.jsx'
 import ResultadoOutfit from './pages/ResultadoOutfit.jsx'
@@ -45,6 +47,15 @@ function AppRoutes() {
 }
 
 export default function App() {
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (session?.access_token) {
+        localStorage.setItem('closy_token', session.access_token)
+      }
+    })
+    return () => subscription.unsubscribe()
+  }, [])
+
   return (
     <BrowserRouter>
       <div className="app-shell">

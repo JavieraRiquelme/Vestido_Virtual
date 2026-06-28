@@ -9,7 +9,7 @@ const TABS = [
   { path: "/pizarron",       label: "Pizarrón" },
 ];
 
-const SIN_NAV = ["/login", "/registro"];
+const SIN_NAV = ["/login", "/registro", "/recuperar-password", "/reset-password"];
 
 export default function NavBar() {
   const navigate  = useNavigate();
@@ -25,7 +25,7 @@ export default function NavBar() {
           Modo demo
           <button
             className="demo-banner__salir"
-            onClick={() => { cerrarSesion(); navigate("/login"); }}
+            onClick={async () => { await cerrarSesion(); navigate("/login"); }}
           >
             Salir
           </button>
@@ -50,7 +50,7 @@ export default function NavBar() {
         {!demo && (
           <button
             className="navbar-burbuja__btn navbar-burbuja__btn--salir"
-            onClick={() => { cerrarSesion(); navigate("/login"); }}
+            onClick={async () => { await cerrarSesion(); navigate("/login"); }}
             aria-label="Cerrar sesión"
           >
             <span className="navbar-burbuja__label">Salir</span>

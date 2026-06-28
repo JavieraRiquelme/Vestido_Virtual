@@ -1,20 +1,22 @@
-const TOKEN_KEY   = 'closy_token'
+import { supabase } from '../lib/supabase'
+
 const USUARIO_KEY = 'closy_usuario_id'
 const DEMO_KEY    = 'closy_demo'
 
 export function guardarSesion(token, usuarioId) {
-  localStorage.setItem(TOKEN_KEY, token)
+  localStorage.setItem('closy_token', token)
   localStorage.setItem(USUARIO_KEY, String(usuarioId))
 }
 
-export function cerrarSesion() {
-  localStorage.removeItem(TOKEN_KEY)
+export async function cerrarSesion() {
+  await supabase.auth.signOut()
+  localStorage.removeItem('closy_token')
   localStorage.removeItem(USUARIO_KEY)
   localStorage.removeItem(DEMO_KEY)
 }
 
 export function getToken() {
-  return localStorage.getItem(TOKEN_KEY)
+  return localStorage.getItem('closy_token')
 }
 
 export function getUsuarioId() {

@@ -1,130 +1,59 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
-from pydantic import BaseModel, EmailStr
-from datetime import datetime, timedelta
-import uuid, hashlib
-import resend
+from pydantic import BaseModel
+from supabase import create_client
+
 from app.core.database import get_db
 from app.core.config import settings
-from app.models.models import Usuario, PasswordResetToken
-from app.services.auth_service import hashear_password, verificar_password, crear_token
+from app.models.models import Usuario
 
 router = APIRouter()
 
-class RegisterRequest(BaseModel):
-    username: str
-    email: str
-    nombre: str
-    password: str
 
-class LoginRequest(BaseModel):
-    username: str
-    password: str
-
-class SolicitarResetRequest(BaseModel):
-    email: str
-
-class ResetPasswordRequest(BaseModel):
-    token: str
-    nueva_password: str
-
-@router.post("/register")
-def register(datos: RegisterRequest, db: Session = Depends(get_db)):
-    if db.query(Usuario).filter(
-        (Usuario.username == datos.username) | (Usuario.email == datos.email)
-    ).first():
-        raise HTTPException(status_code=400, detail="Username o email ya en uso")
-    
-    usuario = Usuario(
-        username = datos.username,
-        email = datos.email,
-        nombre = datos.nombre,
-        password_hash = hashear_password(datos.password),
-    )
-    db.add(usuario)
-    db.commit()
-    db.refresh(usuario)
-    token = crear_token({"sub": str(usuario.id)})
-    return {"access_token": token, "token_type": "bearer", "usuario_id": usuario.id}
-
-@router.post("/login")
-def login(datos: LoginRequest, db: Session = Depends(get_db)):
-    usuario = db.query(Usuario).filter(Usuario.username == datos.username).first()
-
-    if not usuario or not verificar_password(datos.password, usuario.password_hash):
-        raise HTTPException(status_code=401, detail="Credenciales incorrectas")
-
-    token = crear_token({"sub": str(usuario.id)})
-    return {"access_token": token, "token_type": "bearer", "usuario_id": usuario.id}
+class SyncRequest(BaseModel):
+    nombre:   str | None = None
+    username: str | None = None
 
 
-@router.post("/solicitar-reset")
-def solicitar_reset(datos: SolicitarResetRequest, db: Session = Depends(get_db)):
-    usuario = db.query(Usuario).filter(Usuario.email == datos.email).first()
-    # Respuesta genérica siempre — no revelar si el email existe
+def _verificar_token_supabase(token: str):
+    try:
+        sb  = create_client(settings.SUPABASE_URL, settings.SUPABASE_KEY)
+        res = sb.auth.get_user(token)
+        if not res.user:
+            raise HTTPException(status_code=401, detail="Token inválido")
+        return res.user
+    except HTTPException:
+        raise
+    except Exception:
+        raise HTTPException(status_code=401, detail="Token inválido")
+
+
+@router.post("/supabase-sync")
+def supabase_sync(datos: SyncRequest, request: Request, db: Session = Depends(get_db)):
+    auth = request.headers.get("Authorization", "")
+    if not auth.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Token requerido")
+
+    sb_user  = _verificar_token_supabase(auth[7:])
+    email    = sb_user.email
+    metadata = sb_user.user_metadata or {}
+
+    usuario = db.query(Usuario).filter(Usuario.email == email).first()
     if not usuario:
-        return {"mensaje": "Si el email está registrado, recibirás un enlace."}
+        base = (datos.username or metadata.get("username") or email.split("@")[0])[:20]
+        username = base
+        n = 1
+        while db.query(Usuario).filter(Usuario.username == username).first():
+            username = f"{base}{n}"; n += 1
 
-    # Invalidar tokens previos del usuario
-    db.query(PasswordResetToken).filter(
-        PasswordResetToken.usuario_id == usuario.id,
-        PasswordResetToken.used == False
-    ).update({"used": True})
+        usuario = Usuario(
+            username      = username,
+            email         = email,
+            nombre        = datos.nombre or metadata.get("nombre") or base,
+            password_hash = "__supabase__",
+        )
+        db.add(usuario)
+        db.commit()
+        db.refresh(usuario)
 
-    raw_token = str(uuid.uuid4())
-    token_hash = hashlib.sha256(raw_token.encode()).hexdigest()
-
-    reset = PasswordResetToken(
-        usuario_id = usuario.id,
-        token_hash = token_hash,
-        expires_at = datetime.utcnow() + timedelta(hours=1),
-    )
-    db.add(reset)
-    db.commit()
-
-    link = f"{settings.FRONTEND_URL}/reset-password?token={raw_token}"
-    html = f"""
-    <div style="font-family:sans-serif;max-width:480px;margin:0 auto;padding:32px;">
-      <h2 style="color:#262628;">Recupera tu contraseña</h2>
-      <p style="color:#5a5a5c;">Hola <strong>{usuario.nombre}</strong>, recibimos una solicitud para restablecer tu contraseña de Klosy.</p>
-      <a href="{link}" style="display:inline-block;margin:20px 0;padding:14px 28px;background:#262628;color:#FFF6EE;border-radius:50px;text-decoration:none;font-weight:700;">
-        Cambiar contraseña
-      </a>
-      <p style="color:#9a9a9c;font-size:0.85rem;">Este enlace expira en 1 hora. Si no solicitaste esto, ignora este email.</p>
-    </div>
-    """
-
-    if settings.RESEND_API_KEY:
-        resend.api_key = settings.RESEND_API_KEY
-        resend.Emails.send({
-            "from":    settings.FROM_EMAIL,
-            "to":      [usuario.email],
-            "subject": "Recupera tu contraseña de Klosy",
-            "html":    html,
-        })
-
-    return {"mensaje": "Si el email está registrado, recibirás un enlace."}
-
-
-@router.post("/reset-password")
-def reset_password(datos: ResetPasswordRequest, db: Session = Depends(get_db)):
-    token_hash = hashlib.sha256(datos.token.encode()).hexdigest()
-
-    reset = db.query(PasswordResetToken).filter(
-        PasswordResetToken.token_hash == token_hash,
-        PasswordResetToken.used       == False,
-        PasswordResetToken.expires_at >  datetime.utcnow(),
-    ).first()
-
-    if not reset:
-        raise HTTPException(status_code=400, detail="Enlace inválido o expirado")
-
-    if len(datos.nueva_password) < 6:
-        raise HTTPException(status_code=400, detail="La contraseña debe tener al menos 6 caracteres")
-
-    usuario = db.query(Usuario).filter(Usuario.id == reset.usuario_id).first()
-    usuario.password_hash = hashear_password(datos.nueva_password)
-    reset.used = True
-    db.commit()
-
-    return {"mensaje": "Contraseña actualizada correctamente"}
+    return {"usuario_id": usuario.id, "nombre": usuario.nombre, "username": usuario.username}

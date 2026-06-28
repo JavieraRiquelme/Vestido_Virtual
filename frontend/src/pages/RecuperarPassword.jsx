@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { supabase } from '../lib/supabase'
 import './Auth.css'
 
-const API = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+const SITE_URL = import.meta.env.VITE_SITE_URL || window.location.origin
 
 export default function RecuperarPassword() {
   const [email,    setEmail]    = useState('')
@@ -15,15 +16,10 @@ export default function RecuperarPassword() {
     setError(null)
     setCargando(true)
     try {
-      const res = await fetch(`${API}/auth/solicitar-reset`, {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ email }),
+      const { error: sbError } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${SITE_URL}/reset-password`,
       })
-      if (!res.ok) {
-        const d = await res.json()
-        throw new Error(d.detail || 'Error al enviar')
-      }
+      if (sbError) throw new Error(sbError.message)
       setEnviado(true)
     } catch (err) {
       setError(err.message)
@@ -73,7 +69,6 @@ export default function RecuperarPassword() {
                 {cargando ? 'Enviando...' : 'Enviar enlace'}
               </button>
             </form>
-
             <p className="auth__link-texto">
               <Link className="auth__link" to="/login">← Volver</Link>
             </p>
