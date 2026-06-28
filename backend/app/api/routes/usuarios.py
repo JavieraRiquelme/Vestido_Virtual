@@ -6,6 +6,14 @@ from app.schemas.usuario import UsuarioCreate, UsuarioRead
 
 router = APIRouter()
 
+@router.get("/email-by-username")
+def email_by_username(username: str, db: Session = Depends(get_db)):
+    usuario = db.query(Usuario).filter(Usuario.username == username).first()
+    if not usuario:
+        raise HTTPException(status_code=404, detail="not_found")
+    return {"email": usuario.email}
+
+
 @router.get("/", response_model=list[UsuarioRead])
 def listar(db: Session = Depends(get_db)):
     return db.query(Usuario).all()

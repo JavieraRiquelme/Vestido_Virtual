@@ -18,7 +18,16 @@ export default function Login() {
     setError(null)
     setCargando(true)
     try {
-      const { data, error: sbError } = await supabase.auth.signInWithPassword({ email, password })
+      // Si no tiene @ es un username → buscar email primero
+      let emailLogin = email.trim()
+      if (!emailLogin.includes('@')) {
+        const res = await fetch(`${API}/usuarios/email-by-username?username=${encodeURIComponent(emailLogin)}`)
+        if (!res.ok) throw new Error('Email o contraseña incorrectos')
+        const d = await res.json()
+        emailLogin = d.email
+      }
+
+      const { data, error: sbError } = await supabase.auth.signInWithPassword({ email: emailLogin, password })
       if (sbError) {
         throw new Error(
           sbError.message.includes('Invalid login credentials')
@@ -53,15 +62,15 @@ export default function Login() {
 
         <form className="auth__form" onSubmit={enviar}>
           <label className="auth__label">
-            Email
+            Email o usuario
             <input
               className="auth__input"
-              type="email"
-              placeholder="tu@email.com"
+              type="text"
+              placeholder="tu@email.com o tu_usuario"
               value={email}
               onChange={e => setEmail(e.target.value)}
               required
-              autoComplete="email"
+              autoComplete="username"
             />
           </label>
           <label className="auth__label">
